@@ -161,8 +161,13 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
             $sql = $qb->getSQL();
         }
+        if ($options['input_as_params']) {
+            $params = $state->getInput();
+        } else {
+            $params = $options['params'];
+        }
 
-        return $connection->executeQuery($sql);
+        return $connection->executeQuery($sql, $params, $options['types']);
     }
 
     /**
@@ -183,6 +188,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
                 'limit' => null,
                 'offset' => null,
                 'paginate' => null,
+                'input_as_params' => false,
+                'params' => [],
+                'types' => [],
                 'empty_log_level' => LogLevel::WARNING,
             ]
         );
@@ -191,6 +199,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         $resolver->setAllowedTypes('paginate', ['NULL', 'int']);
         $resolver->setAllowedTypes('limit', ['NULL', 'integer']);
         $resolver->setAllowedTypes('offset', ['NULL', 'integer']);
+        $resolver->setAllowedTypes('input_as_params', ['bool']);
+        $resolver->setAllowedTypes('params', ['array']);
+        $resolver->setAllowedTypes('types', ['array']);
         $resolver->setAllowedValues(
             'empty_log_level',
             [

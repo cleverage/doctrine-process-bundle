@@ -21,7 +21,9 @@ use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Fetch entities from doctrine
+ * Execute an update/delete in the database from a SQL statement
+ *
+ * @see https://www.doctrine-project.org/projects/doctrine-dbal/en/2.9/reference/data-retrieval-and-manipulation.html#list-of-parameters-conversion
  *
  * @author Valentin Clavreul <vclavreul@clever-age.com>
  * @author Vincent Chalnot <vchalnot@clever-age.com>
@@ -53,30 +55,21 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
      */
     public function execute(ProcessState $state): void
     {
-        $statement = $this->initializeStatement($state);
-
-        if (false === $statement->execute()) {
-            throw new \RuntimeException("Error while executing query: {$statement->errorInfo()}");
-        }
-    }
-
-    /**
-     * @param ProcessState $state
-     *
-     * @throws ExceptionInterface
-     * @throws \InvalidArgumentException
-     * @throws DBALException
-     *
-     * @return ResultStatement
-     */
-    protected function initializeStatement(ProcessState $state): ResultStatement
-    {
+        $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
 
-        $input = $state->getInput();
-        $params = is_array($input) ? $input : [];
+        if ($options['input_as_params']) {
+            $params = $state->getInput();
+        } else {
+            $params = $options['params'];
+        }
+        if (!is_array($params)) {
+            throw new \UnexpectedValueException('Expecting an array of params');
+        }
 
-        return $connection->executeQuery($this->getOption($state, 'sql'), $params);
+        $numberRows = $connection->executeUpdate($options['sql'], $params, $options['types']);
+
+        $state->setOutput($numberRows);
     }
 
     /**
@@ -93,9 +86,15 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         $resolver->setDefaults(
             [
                 'connection' => null,
+                'input_as_params' => true,
+                'params' => [],
+                'types' => [],
             ]
         );
         $resolver->setAllowedTypes('connection', ['NULL', 'string']);
+        $resolver->setAllowedTypes('input_as_params', ['bool']);
+        $resolver->setAllowedTypes('params', ['array']);
+        $resolver->setAllowedTypes('types', ['array']);
     }
 
     /**
