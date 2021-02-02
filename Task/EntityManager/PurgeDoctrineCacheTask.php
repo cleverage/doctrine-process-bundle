@@ -108,7 +108,7 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         $resolver->setAllowedTypes('query_cache', ['bool']);
         $resolver->setAllowedTypes('result_cache', ['bool']);
         $resolver->setAllowedTypes('hydration_cache', ['bool']);
-        $resolver->setAllowedTypes('entity_manager', ['NULL', 'string', EntityManagerInterface::class]);
+        $resolver->setAllowedTypes('entity_manager', ['null', 'string', EntityManagerInterface::class]);
         $resolver->setNormalizer(
             'entity_manager',
             function (/** @noinspection PhpUnusedParameterInspection */

@@ -91,7 +91,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
                 'types' => [],
             ]
         );
-        $resolver->setAllowedTypes('connection', ['NULL', 'string']);
+        $resolver->setAllowedTypes('connection', ['null', 'string']);
         $resolver->setAllowedTypes('input_as_params', ['bool']);
         $resolver->setAllowedTypes('params', ['array']);
         $resolver->setAllowedTypes('types', ['array']);

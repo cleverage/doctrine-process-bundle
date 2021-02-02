@@ -47,7 +47,7 @@ abstract class AbstractDoctrineTask extends AbstractConfigurableTask
                 'entity_manager' => null,
             ]
         );
-        $resolver->setAllowedTypes('entity_manager', ['NULL', 'string']);
+        $resolver->setAllowedTypes('entity_manager', ['null', 'string']);
     }
 
     /**

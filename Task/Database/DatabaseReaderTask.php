@@ -194,11 +194,11 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
                 'empty_log_level' => LogLevel::WARNING,
             ]
         );
-        $resolver->setAllowedTypes('connection', ['NULL', 'string']);
-        $resolver->setAllowedTypes('sql', ['NULL', 'string']);
-        $resolver->setAllowedTypes('paginate', ['NULL', 'int']);
-        $resolver->setAllowedTypes('limit', ['NULL', 'integer']);
-        $resolver->setAllowedTypes('offset', ['NULL', 'integer']);
+        $resolver->setAllowedTypes('connection', ['null', 'string']);
+        $resolver->setAllowedTypes('sql', ['null', 'string']);
+        $resolver->setAllowedTypes('paginate', ['null', 'int']);
+        $resolver->setAllowedTypes('limit', ['null', 'integer']);
+        $resolver->setAllowedTypes('offset', ['null', 'integer']);
         $resolver->setAllowedTypes('input_as_params', ['bool']);
         $resolver->setAllowedTypes('params', ['array']);
         $resolver->setAllowedTypes('types', ['array']);

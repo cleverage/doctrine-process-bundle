@@ -46,8 +46,8 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         );
         $resolver->setAllowedTypes('criteria', ['array']);
         $resolver->setAllowedTypes('order_by', ['array']);
-        $resolver->setAllowedTypes('limit', ['NULL', 'integer']);
-        $resolver->setAllowedTypes('offset', ['NULL', 'integer']);
+        $resolver->setAllowedTypes('limit', ['null', 'integer']);
+        $resolver->setAllowedTypes('offset', ['null', 'integer']);
         $resolver->setAllowedValues(
             'empty_log_level',
             [
@@ -88,7 +88,7 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
             }
             $parameterName = uniqid('param', false);
             if (null === $value) {
-                $qb->andWhere("e.{$field} IS NULL");
+                $qb->andWhere("e.{$field} IS null");
             } else {
                 if (\is_array($value)) {
                     $qb->andWhere("e.{$field} IN (:{$parameterName})");
