@@ -55,6 +55,23 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
      */
     public function execute(ProcessState $state): void
     {
+        $numberRows = $this->initializeStatement($state);
+
+        $state->setOutput($numberRows);
+    }
+
+    /**
+     * @param ProcessState $state
+     *
+     * @throws ExceptionInterface
+     * @throws \InvalidArgumentException
+     * @throws \UnexpectedValueException
+     * @throws DBALException
+     *
+     * @return Integer The number of affected rows.
+     */
+    protected function initializeStatement(ProcessState $state): Integer
+    {
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
 
@@ -67,9 +84,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
             throw new \UnexpectedValueException('Expecting an array of params');
         }
 
-        $numberRows = $connection->executeUpdate($options['sql'], $params, $options['types']);
-
-        $state->setOutput($numberRows);
+        return $connection->executeUpdate($options['sql'], $params, $options['types']);
     }
 
     /**
