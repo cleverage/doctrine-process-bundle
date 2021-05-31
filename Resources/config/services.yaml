@@ -1,6 +1,6 @@
 services:
     CleverAge\DoctrineProcessBundle\Task\:
-        resource: '../../../Task/*'
+        resource: '../../Task/'
         autowire: true
         public: true
         shared: false
