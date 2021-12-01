@@ -14,7 +14,7 @@ use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\FinalizableTaskInterface;
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\PDOStatement;

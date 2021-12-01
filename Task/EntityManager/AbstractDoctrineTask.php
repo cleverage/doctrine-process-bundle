@@ -12,8 +12,8 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

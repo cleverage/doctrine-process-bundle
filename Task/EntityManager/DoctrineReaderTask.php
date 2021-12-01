@@ -12,7 +12,7 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
