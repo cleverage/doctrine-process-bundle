@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (C) 2017-2019 Clever-Age
+ * Copyright (C) 2017-2023 Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,26 +17,17 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LogLevel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use UnexpectedValueException;
 
 /**
  * Easily extendable task to query entities in their repository
- *
- * @author Valentin Clavreul <vclavreul@clever-age.com>
- * @author Vincent Chalnot <vchalnot@clever-age.com>
  */
 abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
-        $resolver->setRequired(
-            [
-                'class_name',
-            ]
-        );
+        $resolver->setRequired(['class_name']);
         $resolver->setAllowedTypes('class_name', ['string']);
         $resolver->setDefaults(
             [
@@ -64,15 +58,8 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
     }
 
     /**
-     * @param EntityRepository $repository
-     * @param array            $criteria
-     * @param array            $orderBy
      * @param int              $limit
      * @param int              $offset
-     *
-     * @throws \UnexpectedValueException
-     *
-     * @return QueryBuilder
      */
     protected function getQueryBuilder(
         EntityRepository $repository,
@@ -84,10 +71,10 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
-                throw new \UnexpectedValueException("Forbidden field name '{$field}'");
+                throw new UnexpectedValueException("Forbidden field name '{$field}'");
             }
             $parameterName = uniqid('param', false);
-            if (null === $value) {
+            if ($value === null) {
                 $qb->andWhere("e.{$field} IS null");
             } else {
                 if (\is_array($value)) {
@@ -102,10 +89,10 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         foreach ($orderBy as $field => $order) {
             $qb->addOrderBy("e.{$field}", $order);
         }
-        if (null !== $limit) {
+        if ($limit !== null) {
             $qb->setMaxResults($limit);
         }
-        if (null !== $offset) {
+        if ($offset !== null) {
             $qb->setFirstResult($offset);
         }
 

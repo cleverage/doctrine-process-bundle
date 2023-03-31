@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (C) 2017-2019 Clever-Age
+ * Copyright (C) 2017-2023 Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,60 +17,37 @@ use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\FinalizableTaskInterface;
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\PDOStatement;
 use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Fetch entities from doctrine
- *
- * @author Valentin Clavreul <vclavreul@clever-age.com>
- * @author Vincent Chalnot <vchalnot@clever-age.com>
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface
 {
-    /** @var LoggerInterface */
-    protected $logger;
+    protected ?PDOStatement $statement = null;
 
-    /** @var ManagerRegistry */
-    protected $doctrine;
+    protected mixed $nextItem = null;
 
-    /** @var PDOStatement */
-    protected $statement;
-
-    /** @var array|mixed */
-    protected $nextItem;
-
-    /**
-     * @param LoggerInterface $logger
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine)
-    {
-        $this->logger = $logger;
-        $this->doctrine = $doctrine;
+    public function __construct(
+        protected LoggerInterface $logger,
+        protected ManagerRegistry $doctrine
+    ) {
     }
 
     /**
      * Moves the internal pointer to the next element,
      * return true if the task has a next element
      * return false if the task has terminated it's iteration
-     *
-     * @param ProcessState $state
-     *
-     * @throws \LogicException
-     *
-     * @return bool
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->statement) {
+        if (! $this->statement) {
             return false;
         }
 
@@ -76,22 +56,15 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         return (bool) $this->nextItem;
     }
 
-    /**
-     * @param ProcessState $state
-     *
-     * @throws \InvalidArgumentException
-     * @throws ExceptionInterface
-     * @throws DBALException
-     */
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!$this->statement) {
+        if (! $this->statement) {
             $this->statement = $this->initializeStatement($state);
         }
 
         // Check if the next item has been stored by the next() call
-        if (null !== $this->nextItem) {
+        if ($this->nextItem !== null) {
             $result = $this->nextItem;
             $this->nextItem = null;
         } else {
@@ -99,8 +72,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         }
 
         // Handle empty results
-        if (false === $result) {
-            $logContext = ['options' => $options];
+        if ($result === false) {
+            $logContext = [
+                'options' => $options,
+            ];
             $this->logger->log($options['empty_log_level'], 'Empty resultset for query', $logContext);
             $state->setSkipped(true);
             $this->statement = null;
@@ -108,10 +83,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             return;
         }
 
-        if (null !== $options['paginate']) {
+        if ($options['paginate'] !== null) {
             $results = [];
             $i = 0;
-            while (false !== $result && $i++ < $options['paginate']) {
+            while ($result !== false && $i++ < $options['paginate']) {
                 $results[] = $result;
                 $result = $this->statement->fetch();
             }
@@ -121,32 +96,20 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         }
     }
 
-    /**
-     * @param ProcessState $state
-     */
-    public function finalize(ProcessState $state)
+    public function finalize(ProcessState $state): void
     {
         if ($this->statement) {
             $this->statement->closeCursor();
         }
     }
 
-    /**
-     * @param ProcessState $state
-     *
-     * @throws ExceptionInterface
-     * @throws \InvalidArgumentException
-     * @throws DBALException
-     *
-     * @return ResultStatement
-     */
     protected function initializeStatement(ProcessState $state): ResultStatement
     {
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
         $sql = $options['sql'];
 
-        if (null === $sql) {
+        if ($sql === null) {
             $qb = $connection->createQueryBuilder();
             $qb
                 ->select('tbl.*')
@@ -170,16 +133,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         return $connection->executeQuery($sql, $params, $options['types']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(
-            [
-                'table',
-            ]
-        );
+        $resolver->setRequired(['table']);
         $resolver->setAllowedTypes('table', ['string']);
         $resolver->setDefaults(
             [
@@ -217,18 +173,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         );
     }
 
-    /**
-     * @param ProcessState $state
-     *
-     * @throws \InvalidArgumentException
-     * @throws ExceptionInterface
-     *
-     * @return Connection
-     */
     protected function getConnection(ProcessState $state): Connection
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-
         return $this->doctrine->getConnection($this->getOption($state, 'connection'));
     }
 }

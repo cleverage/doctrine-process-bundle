@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (C) 2017-2019 Clever-Age
+ * Copyright (C) 2017-2023 Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,20 +17,20 @@ use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Cache\FlushableCache;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use UnexpectedValueException;
 
 /**
  * Purge Doctrine internal caches, might be useful for long process with tons of queries
- *
- * @author Vincent Chalnot <vchalnot@clever-age.com>
  */
 class PurgeDoctrineCacheTask extends AbstractConfigurableTask
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     protected const METHOD_MAP = [
         'query_cache' => 'getQueryCacheImpl',
         'result_cache' => 'getResultCacheImpl',
@@ -35,22 +38,11 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         'metadata_cache' => 'getMetadataCacheImpl',
     ];
 
-    /** @var ManagerRegistry */
-    protected $doctrine;
-
-    /**
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(ManagerRegistry $doctrine)
-    {
-        $this->doctrine = $doctrine;
+    public function __construct(
+        protected ManagerRegistry $doctrine
+    ) {
     }
 
-    /**
-     * @param ProcessState $state
-     *
-     * @throws ExceptionInterface
-     */
     public function execute(ProcessState $state): void
     {
         $entityManager = $this->getOption($state, 'entity_manager');
@@ -65,25 +57,16 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         }
     }
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param ProcessState           $state
-     *
-     * @throws ExceptionInterface
-     */
     protected function purgeEntityManagerCache(EntityManagerInterface $entityManager, ProcessState $state): void
     {
         $options = $this->getOptions($state);
         foreach (self::METHOD_MAP as $option => $method) {
             if ($options[$option]) {
-                $this->purgeCache($entityManager->getConfiguration()->$method());
+                $this->purgeCache($entityManager->getConfiguration()->{$method}());
             }
         }
     }
 
-    /**
-     * @param Cache $cache
-     */
     protected function purgeCache(Cache $cache = null): void
     {
         if ($cache instanceof FlushableCache) {
@@ -91,9 +74,6 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         }
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
@@ -111,18 +91,15 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         $resolver->setAllowedTypes('entity_manager', ['null', 'string', EntityManagerInterface::class]);
         $resolver->setNormalizer(
             'entity_manager',
-            function (/** @noinspection PhpUnusedParameterInspection */
-                Options $options,
-                $value
-            ) {
-                if (null === $value) {
+            function (Options $options, $value): ?EntityManagerInterface {
+                if ($value === null) {
                     return null;
                 }
                 if (is_string($value)) {
                     $value = $this->doctrine->getManager($value);
                 }
-                if (!$value instanceof EntityManagerInterface) {
-                    throw new \UnexpectedValueException('Unable to resolve entity manager');
+                if (! $value instanceof EntityManagerInterface) {
+                    throw new UnexpectedValueException('Unable to resolve entity manager');
                 }
 
                 return $value;

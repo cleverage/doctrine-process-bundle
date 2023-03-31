@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
+
 /**
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (C) 2017-2019 Clever-Age
+ * Copyright (C) 2017-2023 Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,34 +15,24 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
+use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use UnexpectedValueException;
 
 /**
  * Fetch entities from doctrine
- *
- * @author Valentin Clavreul <vclavreul@clever-age.com>
- * @author Vincent Chalnot <vchalnot@clever-age.com>
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
-    /** @var LoggerInterface */
-    protected $logger;
+    protected ?IterableResult $iterator = null;
 
-    /** @var IterableResult */
-    protected $iterator;
-
-    /**
-     * @param LoggerInterface $logger
-     * @param ManagerRegistry $doctrine
-     */
-    public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        protected LoggerInterface $logger,
+        ManagerRegistry $doctrine
+    ) {
         parent::__construct($doctrine);
     }
 
@@ -47,16 +40,10 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      * Moves the internal pointer to the next element,
      * return true if the task has a next element
      * return false if the task has terminated it's iteration
-     *
-     * @param ProcessState $state
-     *
-     * @throws \LogicException
-     *
-     * @return bool
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->iterator) {
+        if (! $this->iterator) {
             return false;
         }
         $this->iterator->next();
@@ -64,25 +51,18 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         return $this->iterator->valid();
     }
 
-    /**
-     * @param ProcessState $state
-     *
-     * @throws \InvalidArgumentException
-     * @throws ExceptionInterface
-     * @throws \UnexpectedValueException
-     */
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!$this->iterator) {
+        if (! $this->iterator) {
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
-            if (!$entityManager instanceof EntityManagerInterface) {
-                throw new \UnexpectedValueException("No manager found for class {$class}");
+            if (! $entityManager instanceof EntityManagerInterface) {
+                throw new UnexpectedValueException("No manager found for class {$class}");
             }
             $repository = $entityManager->getRepository($class);
-            if (!$repository instanceof EntityRepository) {
-                throw new \UnexpectedValueException("No repository found for class {$class}");
+            if (! $repository instanceof EntityRepository) {
+                throw new UnexpectedValueException("No repository found for class {$class}");
             }
             $this->initIterator($repository, $options);
         }
@@ -90,8 +70,10 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         $result = $this->iterator->current();
 
         // Handle empty results
-        if (false === $result) {
-            $logContext = ['options' => $options];
+        if ($result === false) {
+            $logContext = [
+                'options' => $options,
+            ];
             $this->logger->log($options['empty_log_level'], 'Empty resultset for query', $logContext);
             $state->setSkipped(true);
             $this->iterator = null;
@@ -102,13 +84,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         $state->setOutput(reset($result));
     }
 
-    /**
-     * @param EntityRepository $repository
-     * @param array            $options
-     *
-     * @throws \UnexpectedValueException
-     */
-    protected function initIterator(EntityRepository $repository, array $options)
+    protected function initIterator(EntityRepository $repository, array $options): void
     {
         $qb = $this->getQueryBuilder(
             $repository,
@@ -118,7 +94,8 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $options['offset']
         );
 
-        $this->iterator = $qb->getQuery()->iterate();
+        $this->iterator = $qb->getQuery()
+            ->iterate();
         $this->iterator->next(); // Move to first element
     }
 }

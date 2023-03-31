@@ -30,19 +30,39 @@
             "email": "mveyrenc@clever-age.com",
             "homepage": "https://github.com/mveyrenc",
             "role": "Developer"
+        },
+        {
+          "name": "Xavier Marchegay",
+          "email": "xmarchegay@clever-age.com",
+          "homepage": "https://github.com/xaviermarchegay",
+          "role": "Lead Developer"
         }
     ],
     "autoload": {
         "psr-4": {
-            "CleverAge\\DoctrineProcessBundle\\": ""
+            "CleverAge\\DoctrineProcessBundle\\": "src/"
         }
     },
     "require": {
-        "cleverage/process-bundle": "3.*|dev-v3.0-dev",
-        "doctrine/orm": "~2.5",
-        "doctrine/doctrine-bundle": "~1.6|~2.0"
+        "cleverage/process-bundle": "dev-v4-dev",
+        "doctrine/orm": "^2",
+        "doctrine/doctrine-bundle": "^2"
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.4"
+      "roave/security-advisories": "dev-latest",
+      "phpunit/phpunit": "*",
+      "phpstan/phpstan": "*",
+      "phpstan/phpstan-symfony": "*",
+      "phpstan/extension-installer": "*",
+      "rector/rector": "*",
+      "symplify/easy-coding-standard": "*",
+      "symplify/phpstan-rules": "*",
+      "symfony/test-pack": "^1.1"
+    },
+    "config": {
+      "allow-plugins": {
+        "phpstan/extension-installer": true,
+        "symfony/flex": true
+      }
     }
 }
