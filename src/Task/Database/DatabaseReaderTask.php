@@ -18,8 +18,7 @@ use CleverAge\ProcessBundle\Model\FinalizableTaskInterface;
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\PDOStatement;
-use Doctrine\DBAL\Driver\ResultStatement;
+use Doctrine\DBAL\Result;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -30,7 +29,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface
 {
-    protected ?PDOStatement $statement = null;
+    protected ?Result $statement = null;
 
     protected mixed $nextItem = null;
 
@@ -51,7 +50,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             return false;
         }
 
-        $this->nextItem = $this->statement->fetch();
+        $this->nextItem = $this->statement->fetchAssociative();
 
         return (bool) $this->nextItem;
     }
@@ -68,7 +67,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             $result = $this->nextItem;
             $this->nextItem = null;
         } else {
-            $result = $this->statement->fetch();
+            $result = $this->statement->fetchAssociative();
         }
 
         // Handle empty results
@@ -88,7 +87,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             $i = 0;
             while ($result !== false && $i++ < $options['paginate']) {
                 $results[] = $result;
-                $result = $this->statement->fetch();
+                $result = $this->statement->fetchAssociative();
             }
             $state->setOutput($results);
         } else {
@@ -98,12 +97,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     public function finalize(ProcessState $state): void
     {
-        if ($this->statement) {
-            $this->statement->closeCursor();
-        }
+        $this->statement?->free();
     }
 
-    protected function initializeStatement(ProcessState $state): ResultStatement
+    protected function initializeStatement(ProcessState $state): Result
     {
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);

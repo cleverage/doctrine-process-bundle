@@ -18,6 +18,7 @@ use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LogLevel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use UnexpectedValueException;
+use function is_array;
 
 /**
  * Easily extendable task to query entities in their repository
@@ -57,27 +58,23 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         );
     }
 
-    /**
-     * @param int              $limit
-     * @param int              $offset
-     */
     protected function getQueryBuilder(
         EntityRepository $repository,
         array $criteria,
         array $orderBy,
-        $limit = null,
-        $offset = null
+        ?int $limit = null,
+        ?int $offset = null
     ): QueryBuilder {
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
                 throw new UnexpectedValueException("Forbidden field name '{$field}'");
             }
-            $parameterName = uniqid('param', false);
+            $parameterName = uniqid('param', true);
             if ($value === null) {
                 $qb->andWhere("e.{$field} IS null");
             } else {
-                if (\is_array($value)) {
+                if (is_array($value)) {
                     $qb->andWhere("e.{$field} IN (:{$parameterName})");
                 } else {
                     $qb->andWhere("e.{$field} = :{$parameterName}");

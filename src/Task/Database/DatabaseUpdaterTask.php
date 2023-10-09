@@ -16,6 +16,7 @@ namespace CleverAge\DoctrineProcessBundle\Task\Database;
 use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -43,6 +44,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
 
     /**
      * @return integer The number of affected rows.
+     * @throws Exception
      */
     protected function initializeStatement(ProcessState $state): int
     {
@@ -58,7 +60,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
             throw new UnexpectedValueException('Expecting an array of params');
         }
 
-        return $connection->executeUpdate($options['sql'], $params, $options['types']);
+        return $connection->executeStatement($options['sql'], $params, $options['types']);
     }
 
     protected function configureOptions(OptionsResolver $resolver): void
