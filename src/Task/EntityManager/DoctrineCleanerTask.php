@@ -16,24 +16,22 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use RuntimeException;
-use UnexpectedValueException;
 
 /**
- * Clean Doctrine entities from unit of work
+ * Clean Doctrine entities from unit of work.
  */
 class DoctrineCleanerTask extends AbstractDoctrineTask
 {
     public function execute(ProcessState $state): void
     {
         $entity = $state->getInput();
-        if ($entity === null) {
-            throw new RuntimeException('DoctrineWriterTask does not allow null input');
+        if (null === $entity) {
+            throw new \RuntimeException('DoctrineWriterTask does not allow null input');
         }
         $class = ClassUtils::getClass($entity);
         $entityManager = $this->doctrine->getManagerForClass($class);
-        if (! $entityManager instanceof EntityManagerInterface) {
-            throw new UnexpectedValueException("No manager found for class {$class}");
+        if (!$entityManager instanceof EntityManagerInterface) {
+            throw new \UnexpectedValueException("No manager found for class {$class}");
         }
         $entityManager->clear();
     }

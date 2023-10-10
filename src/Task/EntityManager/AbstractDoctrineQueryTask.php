@@ -17,12 +17,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LogLevel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use UnexpectedValueException;
-
-use function is_array;
 
 /**
- * Easily extendable task to query entities in their repository
+ * Easily extendable task to query entities in their repository.
  */
 abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
 {
@@ -63,19 +60,19 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         EntityRepository $repository,
         array $criteria,
         array $orderBy,
-        ?int $limit = null,
-        ?int $offset = null
+        int $limit = null,
+        int $offset = null
     ): QueryBuilder {
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
-                throw new UnexpectedValueException("Forbidden field name '{$field}'");
+                throw new \UnexpectedValueException("Forbidden field name '{$field}'");
             }
             $parameterName = uniqid('param', true);
-            if ($value === null) {
+            if (null === $value) {
                 $qb->andWhere("e.{$field} IS null");
             } else {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $qb->andWhere("e.{$field} IN (:{$parameterName})");
                 } else {
                     $qb->andWhere("e.{$field} = :{$parameterName}");
@@ -83,14 +80,14 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
                 $qb->setParameter($parameterName, $value);
             }
         }
-        /** @noinspection ForeachSourceInspection */
+        /* @noinspection ForeachSourceInspection */
         foreach ($orderBy as $field => $order) {
             $qb->addOrderBy("e.{$field}", $order);
         }
-        if ($limit !== null) {
+        if (null !== $limit) {
             $qb->setMaxResults($limit);
         }
-        if ($offset !== null) {
+        if (null !== $offset) {
             $qb->setFirstResult($offset);
         }
 

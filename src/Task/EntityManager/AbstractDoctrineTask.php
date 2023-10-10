@@ -20,7 +20,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Base logic for doctrine related tasks
+ * Base logic for doctrine related tasks.
  */
 abstract class AbstractDoctrineTask extends AbstractConfigurableTask
 {

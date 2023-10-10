@@ -16,10 +16,9 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use UnexpectedValueException;
 
 /**
- * Remove Doctrine entities
+ * Remove Doctrine entities.
  */
 class DoctrineRemoverTask extends AbstractDoctrineTask
 {
@@ -28,8 +27,8 @@ class DoctrineRemoverTask extends AbstractDoctrineTask
         $entity = $state->getInput();
         $class = ClassUtils::getClass($entity);
         $entityManager = $this->doctrine->getManagerForClass($class);
-        if (! $entityManager instanceof EntityManagerInterface) {
-            throw new UnexpectedValueException("No manager found for class {$class}");
+        if (!$entityManager instanceof EntityManagerInterface) {
+            throw new \UnexpectedValueException("No manager found for class {$class}");
         }
         $entityManager->remove($entity);
         $entityManager->flush();

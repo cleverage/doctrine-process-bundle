@@ -21,10 +21,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use UnexpectedValueException;
 
 /**
- * Purge Doctrine internal caches, might be useful for long process with tons of queries
+ * Purge Doctrine internal caches, might be useful for long process with tons of queries.
  */
 class PurgeDoctrineCacheTask extends AbstractConfigurableTask
 {
@@ -92,14 +91,14 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         $resolver->setNormalizer(
             'entity_manager',
             function (Options $options, $value): ?EntityManagerInterface {
-                if ($value === null) {
+                if (null === $value) {
                     return null;
                 }
                 if (is_string($value)) {
                     $value = $this->doctrine->getManager($value);
                 }
-                if (! $value instanceof EntityManagerInterface) {
-                    throw new UnexpectedValueException('Unable to resolve entity manager');
+                if (!$value instanceof EntityManagerInterface) {
+                    throw new \UnexpectedValueException('Unable to resolve entity manager');
                 }
 
                 return $value;

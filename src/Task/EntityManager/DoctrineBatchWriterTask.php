@@ -17,14 +17,10 @@ use CleverAge\ProcessBundle\Model\FlushableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
-use SplObjectStorage;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use UnexpectedValueException;
-
-use function count;
 
 /**
- * Persists Doctrine entities
+ * Persists Doctrine entities.
  */
 class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableTaskInterface
 {
@@ -39,7 +35,7 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
     {
         $this->batch[] = $state->getInput();
 
-        if (count($this->batch) >= $this->getOption($state, 'batch_count')) {
+        if (\count($this->batch) >= $this->getOption($state, 'batch_count')) {
             $this->writeBatch($state);
         } else {
             $state->setSkipped(true);
@@ -57,19 +53,19 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
 
     protected function writeBatch(ProcessState $state): void
     {
-        if (count($this->batch) === 0) {
+        if (0 === \count($this->batch)) {
             $state->setSkipped(true);
 
             return;
         }
 
         // Support for multiple entity managers is overkill but might be necessary
-        $entityManagers = new SplObjectStorage();
+        $entityManagers = new \SplObjectStorage();
         foreach ($this->batch as $entity) {
             $class = ClassUtils::getClass($entity);
             $entityManager = $this->doctrine->getManagerForClass($class);
-            if (! $entityManager instanceof EntityManagerInterface) {
-                throw new UnexpectedValueException("No manager found for class {$class}");
+            if (!$entityManager instanceof EntityManagerInterface) {
+                throw new \UnexpectedValueException("No manager found for class {$class}");
             }
             $entityManager->persist($entity);
             $entityManagers->attach($entityManager);

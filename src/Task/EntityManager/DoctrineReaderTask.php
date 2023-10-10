@@ -20,10 +20,9 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
-use UnexpectedValueException;
 
 /**
- * Fetch entities from doctrine
+ * Fetch entities from doctrine.
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
@@ -39,11 +38,11 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
     /**
      * Moves the internal pointer to the next element,
      * return true if the task has a next element
-     * return false if the task has terminated it's iteration
+     * return false if the task has terminated it's iteration.
      */
     public function next(ProcessState $state): bool
     {
-        if (! $this->iterator) {
+        if (!$this->iterator) {
             return false;
         }
         $this->iterator->next();
@@ -54,15 +53,15 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (! $this->iterator) {
+        if (!$this->iterator) {
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
-            if (! $entityManager instanceof EntityManagerInterface) {
-                throw new UnexpectedValueException("No manager found for class {$class}");
+            if (!$entityManager instanceof EntityManagerInterface) {
+                throw new \UnexpectedValueException("No manager found for class {$class}");
             }
             $repository = $entityManager->getRepository($class);
-            if (! $repository instanceof EntityRepository) {
-                throw new UnexpectedValueException("No repository found for class {$class}");
+            if (!$repository instanceof EntityRepository) {
+                throw new \UnexpectedValueException("No repository found for class {$class}");
             }
             $this->initIterator($repository, $options);
         }
@@ -70,7 +69,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         $result = $this->iterator->current();
 
         // Handle empty results
-        if ($result === false) {
+        if (false === $result) {
             $logContext = [
                 'options' => $options,
             ];

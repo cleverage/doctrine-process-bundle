@@ -25,7 +25,7 @@ use Psr\Log\LogLevel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Fetch entities from doctrine
+ * Fetch entities from doctrine.
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface
 {
@@ -42,11 +42,11 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
     /**
      * Moves the internal pointer to the next element,
      * return true if the task has a next element
-     * return false if the task has terminated it's iteration
+     * return false if the task has terminated it's iteration.
      */
     public function next(ProcessState $state): bool
     {
-        if (! $this->statement) {
+        if (!$this->statement) {
             return false;
         }
 
@@ -58,12 +58,12 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (! $this->statement) {
+        if (!$this->statement) {
             $this->statement = $this->initializeStatement($state);
         }
 
         // Check if the next item has been stored by the next() call
-        if ($this->nextItem !== null) {
+        if (null !== $this->nextItem) {
             $result = $this->nextItem;
             $this->nextItem = null;
         } else {
@@ -71,7 +71,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         }
 
         // Handle empty results
-        if ($result === false) {
+        if (false === $result) {
             $logContext = [
                 'options' => $options,
             ];
@@ -82,10 +82,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             return;
         }
 
-        if ($options['paginate'] !== null) {
+        if (null !== $options['paginate']) {
             $results = [];
             $i = 0;
-            while ($result !== false && $i++ < $options['paginate']) {
+            while (false !== $result && $i++ < $options['paginate']) {
                 $results[] = $result;
                 $result = $this->statement->fetchAssociative();
             }
@@ -106,7 +106,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         $connection = $this->getConnection($state);
         $sql = $options['sql'];
 
-        if ($sql === null) {
+        if (null === $sql) {
             $qb = $connection->createQueryBuilder();
             $qb
                 ->select('tbl.*')
@@ -172,7 +172,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     protected function getConnection(ProcessState $state): Connection
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->doctrine->getConnection($this->getOption($state, 'connection'));
     }
 }

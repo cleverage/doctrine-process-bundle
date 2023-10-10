@@ -16,7 +16,7 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 use CleverAge\ProcessBundle\Model\ProcessState;
 
 /**
- * Clear Doctrine's unit of work
+ * Clear Doctrine's unit of work.
  */
 class ClearEntityManagerTask extends AbstractDoctrineTask
 {

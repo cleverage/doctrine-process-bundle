@@ -20,10 +20,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use UnexpectedValueException;
 
 /**
- * Execute an update/delete in the database from a SQL statement
+ * Execute an update/delete in the database from a SQL statement.
  *
  * @see https://www.doctrine-project.org/projects/doctrine-dbal/en/2.9/reference/data-retrieval-and-manipulation.html#list-of-parameters-conversion
  */
@@ -43,7 +42,8 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
     }
 
     /**
-     * @return integer The number of affected rows.
+     * @return int the number of affected rows
+     *
      * @throws Exception
      */
     protected function initializeStatement(ProcessState $state): int
@@ -56,8 +56,8 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         } else {
             $params = $options['params'];
         }
-        if (! is_array($params)) {
-            throw new UnexpectedValueException('Expecting an array of params');
+        if (!is_array($params)) {
+            throw new \UnexpectedValueException('Expecting an array of params');
         }
 
         return $connection->executeStatement($options['sql'], $params, $options['types']);
@@ -81,7 +81,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
 
     protected function getConnection(ProcessState $state): Connection
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->doctrine->getConnection($this->getOption($state, 'connection'));
     }
 }

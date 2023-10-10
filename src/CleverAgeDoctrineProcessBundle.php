@@ -16,7 +16,7 @@ namespace CleverAge\DoctrineProcessBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class CleverAgeDoctrineProcessBundle
+ * Class CleverAgeDoctrineProcessBundle.
  *
  * @author  Valentin Clavreul <vclavreul@clever-age.com>
  * @author  Vincent Chalnot <vchalnot@clever-age.com>

@@ -2,6 +2,6 @@
 SHELL := /bin/bash
 
 linter: #[Linter]
-	vendor/bin/php-cs-fixer fix src
-	vendor/bin/rector process
+	vendor/bin/php-cs-fixer fix
+phpstan: #[Phpstan]
 	vendor/bin/phpstan
