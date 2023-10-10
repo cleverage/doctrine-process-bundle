@@ -7,4 +7,4 @@ See process bundle documentation
     - Tasks
       - Entities
         - [DoctrineReaderTask](src/Documentation/reference/task/doctrine_reader_task.md)
-        - [DoctrineWriterTask](src/Documentation/reference/task/doctrine_writer_task.md)
+        - [DoctrineUpdateTask](src/Documentation/reference/task/doctrine_updater_task.md)
