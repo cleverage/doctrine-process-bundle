@@ -17,9 +17,9 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->sets([
         SetList::TYPE_DECLARATION,
-        LevelSetList::UP_TO_PHP_81,
-        SymfonyLevelSetList::UP_TO_SYMFONY_62,
+        LevelSetList::UP_TO_PHP_82,
+        SymfonyLevelSetList::UP_TO_SYMFONY_63,
     ]);
 
-    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->phpVersion(PhpVersion::PHP_82);
 };
