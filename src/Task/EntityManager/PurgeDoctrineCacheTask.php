@@ -66,7 +66,7 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
         }
     }
 
-    protected function purgeCache(Cache $cache = null): void
+    protected function purgeCache(?Cache $cache = null): void
     {
         if ($cache instanceof FlushableCache) {
             $cache->flushAll();
@@ -94,7 +94,7 @@ class PurgeDoctrineCacheTask extends AbstractConfigurableTask
                 if (null === $value) {
                     return null;
                 }
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $value = $this->doctrine->getManager($value);
                 }
                 if (!$value instanceof EntityManagerInterface) {

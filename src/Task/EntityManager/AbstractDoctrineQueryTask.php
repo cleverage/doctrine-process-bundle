@@ -60,8 +60,8 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         EntityRepository $repository,
         array $criteria,
         array $orderBy,
-        int $limit = null,
-        int $offset = null
+        ?int $limit = null,
+        ?int $offset = null
     ): QueryBuilder {
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {

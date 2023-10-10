@@ -56,7 +56,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         } else {
             $params = $options['params'];
         }
-        if (!is_array($params)) {
+        if (!\is_array($params)) {
             throw new \UnexpectedValueException('Expecting an array of params');
         }
 
