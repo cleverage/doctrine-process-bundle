@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the CleverAge/ProcessBundle package.
+ * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
  * Copyright (c) 2017-2023 Clever-Age
  *
