@@ -44,7 +44,7 @@
         }
     },
     "require": {
-        "cleverage/process-bundle": "dev-v4-dev",
+        "cleverage/process-bundle": "dev-prepare-release",
         "doctrine/orm": "^2",
         "doctrine/doctrine-bundle": "^2"
     },
