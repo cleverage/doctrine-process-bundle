@@ -3,10 +3,13 @@ v2.0
 
 ## BC breaks
 
+* [#6](https://github.com/cleverage/doctrine-process-bundle/issues/6) Update services according to Symfony best practices. Services should not use autowiring or autoconfiguration. Instead, all services should be defined explicitly.
+  Services must be prefixed with the bundle alias instead of using fully qualified class names => `cleverage_doctrine_process`
+
 ### Changes
 
-* [#3](https://github.com/cleverage/flysystem-process-bundle/issues/3) Add Makefile & .docker for local standalone usage
-* [#3](https://github.com/cleverage/flysystem-process-bundle/issues/3) Add rector, phpstan & php-cs-fixer configurations & apply it
+* [#3](https://github.com/cleverage/doctrine-process-bundle/issues/3) Add Makefile & .docker for local standalone usage
+* [#3](https://github.com/cleverage/doctrine-process-bundle/issues/3) Add rector, phpstan & php-cs-fixer configurations & apply it
 
 ### Fixes
 

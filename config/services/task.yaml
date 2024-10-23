@@ -1,0 +1,64 @@
+services:
+    _defaults:
+        public: false
+        tags:
+            - { name: monolog.logger, channel: cleverage_process_task }
+
+    cleverage_doctrine_process.task.database_reader:
+        class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask
+        arguments:
+            - '@monolog.logger'
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.database_updater:
+        class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask
+        arguments:
+            - '@doctrine'
+            - '@monolog.logger'
+
+    cleverage_doctrine_process.task.doctrine_clear_entity_manager:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_batch_writer:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_cleaner:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_detacher:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_reader:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask
+        arguments:
+            - '@monolog.logger'
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_refresher:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_remover:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.doctrine_writer:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask
+        arguments:
+            - '@doctrine'
+
+    cleverage_doctrine_process.task.purge_doctrine_cache:
+        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\PurgeDoctrineCacheTask
+        arguments:
+            - '@doctrine'
+
