@@ -17,7 +17,6 @@ use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Persists and flush Doctrine entities.
@@ -29,18 +28,9 @@ class DoctrineWriterTask extends AbstractDoctrineTask
         $state->setOutput($this->writeEntity($state));
     }
 
-    protected function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-        $resolver->setDefaults([
-            'global_flush' => true,
-        ]);
-        $resolver->setAllowedTypes('global_flush', ['boolean']);
-    }
-
     protected function writeEntity(ProcessState $state): mixed
     {
-        $options = $this->getOptions($state);
+        $this->getOptions($state);
         /** @var object $entity */
         $entity = $state->getInput();
 
@@ -55,11 +45,7 @@ class DoctrineWriterTask extends AbstractDoctrineTask
         }
         $entityManager->persist($entity);
 
-        if ($options['global_flush']) {
-            $entityManager->flush();
-        } else {
-            $entityManager->flush($entity);
-        }
+        $entityManager->flush();
 
         return $entity;
     }

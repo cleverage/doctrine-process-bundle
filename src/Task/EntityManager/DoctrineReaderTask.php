@@ -17,7 +17,6 @@ use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 
@@ -26,7 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
-    protected ?IterableResult $iterator = null;
+    protected ?iterable $iterator = null;
 
     public function __construct(
         protected LoggerInterface $logger,
@@ -42,18 +41,18 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->iterator instanceof IterableResult) {
+        if (!is_iterable($this->iterator)) {
             return false;
         }
-        $this->iterator->next();
+        next($this->iterator);
 
-        return $this->iterator->valid();
+        return false !== current($this->iterator);
     }
 
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!$this->iterator instanceof IterableResult) {
+        if (!is_iterable($this->iterator)) {
             /** @var class-string $class */
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
@@ -61,13 +60,10 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
                 throw new \UnexpectedValueException("No manager found for class {$class}");
             }
             $repository = $entityManager->getRepository($class);
-            if (!$repository instanceof EntityRepository) {
-                throw new \UnexpectedValueException("No repository found for class {$class}");
-            }
             $this->initIterator($repository, $options);
         }
 
-        $result = $this->iterator->current();
+        $result = current($this->iterator);
 
         // Handle empty results
         if (false === $result) {
@@ -95,7 +91,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         );
 
         $this->iterator = $qb->getQuery()
-            ->iterate();
-        $this->iterator->next(); // Move to first element
+            ->toIterable();
+        next($this->iterator); // Move to first element
     }
 }
