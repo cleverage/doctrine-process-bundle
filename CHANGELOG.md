@@ -5,6 +5,7 @@ v2.0
 
 * [#6](https://github.com/cleverage/doctrine-process-bundle/issues/6) Update services according to Symfony best practices. Services should not use autowiring or autoconfiguration. Instead, all services should be defined explicitly.
   Services must be prefixed with the bundle alias instead of using fully qualified class names => `cleverage_doctrine_process`
+* [#5](https://github.com/cleverage/doctrine-process-bundle/issues/5) Bump "doctrine/doctrine-bundle": "^2.5" according to Symfony versions supported by `cleverage/process-bundle`
 
 ### Changes
 
