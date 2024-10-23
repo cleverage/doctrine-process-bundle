@@ -40,12 +40,12 @@
     ],
     "autoload": {
       "psr-4": {
-        "CleverAge\\FlysystemProcessBundle\\": "src/"
+        "CleverAge\\DoctrineProcessBundle\\": "src/"
       }
     },
     "autoload-dev": {
       "psr-4": {
-        "CleverAge\\FlysystemProcessBundle\\Tests\\": "tests/"
+        "CleverAge\\DoctrineProcessBundle\\Tests\\": "tests/"
       }
     },
     "require": {

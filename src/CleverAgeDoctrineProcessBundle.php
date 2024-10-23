@@ -15,13 +15,10 @@ namespace CleverAge\DoctrineProcessBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * Class CleverAgeDoctrineProcessBundle.
- *
- * @author  Valentin Clavreul <vclavreul@clever-age.com>
- * @author  Vincent Chalnot <vchalnot@clever-age.com>
- * @author  Madeline Veyrenc <mveyrenc@clever-age.com>
- */
 class CleverAgeDoctrineProcessBundle extends Bundle
 {
+    public function getPath(): string
+    {
+        return \dirname(__DIR__);
+    }
 }
