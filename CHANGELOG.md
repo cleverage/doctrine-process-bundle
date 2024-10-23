@@ -5,6 +5,9 @@ v2.0
 
 ### Changes
 
+* [#3](https://github.com/cleverage/flysystem-process-bundle/issues/3) Add Makefile & .docker for local standalone usage
+* [#3](https://github.com/cleverage/flysystem-process-bundle/issues/3) Add rector, phpstan & php-cs-fixer configurations & apply it
+
 ### Fixes
 
 v2.0-RC1

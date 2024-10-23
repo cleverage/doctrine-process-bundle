@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
 
     public function __construct(
         protected LoggerInterface $logger,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
     ) {
         parent::__construct($doctrine);
     }
@@ -42,7 +42,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->iterator) {
+        if (!$this->iterator instanceof IterableResult) {
             return false;
         }
         $this->iterator->next();
@@ -53,7 +53,8 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!$this->iterator) {
+        if (!$this->iterator instanceof IterableResult) {
+            /** @var class-string $class */
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
             if (!$entityManager instanceof EntityManagerInterface) {

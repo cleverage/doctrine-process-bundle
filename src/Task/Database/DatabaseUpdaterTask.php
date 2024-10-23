@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -30,7 +30,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
 {
     public function __construct(
         protected ManagerRegistry $doctrine,
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
     ) {
     }
 
@@ -51,11 +51,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
 
-        if ($options['input_as_params']) {
-            $params = $state->getInput();
-        } else {
-            $params = $options['params'];
-        }
+        $params = $options['input_as_params'] ? $state->getInput() : $options['params'];
         if (!\is_array($params)) {
             throw new \UnexpectedValueException('Expecting an array of params');
         }
