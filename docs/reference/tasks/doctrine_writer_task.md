@@ -6,7 +6,7 @@ Write a Doctrine entity to the database.
 Task reference
 --------------
 
-* **Service**: `CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask`
+* **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask`
 
 Accepted inputs
 ---------------

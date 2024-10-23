@@ -1,4 +1,4 @@
-DoctrineReaderTask
+DatabaseReaderTask
 ==================
 
 Reads data from a Doctrine Repository.
