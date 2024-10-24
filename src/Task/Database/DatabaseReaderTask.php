@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -35,7 +35,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     public function __construct(
         protected LoggerInterface $logger,
-        protected ManagerRegistry $doctrine
+        protected ManagerRegistry $doctrine,
     ) {
     }
 
@@ -46,7 +46,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->statement) {
+        if (!$this->statement instanceof Result) {
             return false;
         }
 
@@ -58,7 +58,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!$this->statement) {
+        if (!$this->statement instanceof Result) {
             $this->statement = $this->initializeStatement($state);
         }
 
@@ -121,11 +121,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
             $sql = $qb->getSQL();
         }
-        if ($options['input_as_params']) {
-            $params = $state->getInput();
-        } else {
-            $params = $options['params'];
-        }
+        $params = $options['input_as_params'] ? $state->getInput() : $options['params'];
 
         return $connection->executeQuery($sql, $params, $options['types']);
     }

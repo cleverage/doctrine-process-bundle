@@ -6,7 +6,7 @@ Write a Doctrine entity to the database.
 Task reference
 --------------
 
-* **Service**: `CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask`
+* **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask`
 
 Accepted inputs
 ---------------
@@ -24,5 +24,4 @@ Options
 | Code | Type | Required | Default | Description |
 | ---- | ---- | :------: | ------- | ----------- |
 | `entity_manager` | `string` or `null` | | `null` | Use another entity manager than the default |
-| `global_flush` | `bool` | | `true` | Flush the whole entity manager after persist |
 
