@@ -16,7 +16,7 @@ composer require cleverage/doctrine-process-bundle
 Remember to add the following line to config/bundles.php (not required if Symfony Flex is used)
 
 ```php
-CleverAge\FlysystemProcessBundle\CleverAgeDoctrineProcessBundle::class => ['all' => true],
+CleverAge\DoctrineProcessBundle\CleverAgeDoctrineProcessBundle::class => ['all' => true],
 ```
 
 ## Reference
