@@ -33,4 +33,4 @@ Options
 Example
 -------
 
-https://github.com/cleverage/process-bundle-ui-demo/blob/main/config/packages/process/demo.doctrine.read.yaml
+https://github.com/cleverage/process-bundle-demo/blob/main/config/packages/process/demo.doctrine.read.yaml
