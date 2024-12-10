@@ -68,7 +68,7 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
                 throw new \UnexpectedValueException("Forbidden field name '{$field}'");
             }
-            $parameterName = 'param_' . bin2hex(random_bytes(4));
+            $parameterName = 'param_'.bin2hex(random_bytes(4));
             if (null === $value) {
                 $qb->andWhere("e.{$field} IS null");
             } else {
