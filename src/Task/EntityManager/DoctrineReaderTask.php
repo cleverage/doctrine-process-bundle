@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
-    protected ?iterable $iterator = null;
+    protected ?\IteratorIterator $iterator = null;
 
     public function __construct(
         protected LoggerInterface $logger,
@@ -41,18 +41,18 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      */
     public function next(ProcessState $state): bool
     {
-        if (!is_iterable($this->iterator)) {
+        if (!$this->iterator instanceof \IteratorIterator) {
             return false;
         }
-        next($this->iterator);
+        $this->iterator->next();
 
-        return false !== current($this->iterator);
+        return $this->iterator->valid();
     }
 
     public function execute(ProcessState $state): void
     {
         $options = $this->getOptions($state);
-        if (!is_iterable($this->iterator)) {
+        if (!$this->iterator instanceof \IteratorIterator) {
             /** @var class-string $class */
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
@@ -62,8 +62,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $repository = $entityManager->getRepository($class);
             $this->initIterator($repository, $options);
         }
-
-        $result = current($this->iterator);
+        $result = $this->iterator->current();
 
         // Handle empty results
         if (false === $result) {
@@ -77,7 +76,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             return;
         }
 
-        $state->setOutput(reset($result));
+        $state->setOutput($result);
     }
 
     protected function initIterator(EntityRepository $repository, array $options): void
@@ -90,8 +89,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $options['offset']
         );
 
-        $this->iterator = $qb->getQuery()
-            ->toIterable();
-        next($this->iterator); // Move to first element
+        $this->iterator = new \IteratorIterator($qb->getQuery()->toIterable());
+        $this->iterator->rewind();
     }
 }
