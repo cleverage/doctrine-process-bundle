@@ -19,6 +19,7 @@ use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -26,6 +27,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Fetch entities from doctrine.
+ *
+ * @phpstan-type Options array{
+ *      'sql': ?string,
+ *      'table': string,
+ *      'limit': ?int,
+ *      'empty_log_level': string,
+ *      'paginate': ?int,
+ *      'offset': ?int,
+ *      'input_as_params': bool,
+ *      'params': array<int<0, max>|string, mixed>,
+ *      'types': array<int, int|string|Type|null>|array<string, int|string|Type|null>
+ *   }
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface
 {
@@ -42,7 +55,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
     /**
      * Moves the internal pointer to the next element,
      * return true if the task has a next element
-     * return false if the task has terminated it's iteration.
+     * return false if the task has terminated its iteration.
      */
     public function next(ProcessState $state): bool
     {
@@ -57,6 +70,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     public function execute(ProcessState $state): void
     {
+        /** @var Options $options */
         $options = $this->getOptions($state);
         if (!$this->statement instanceof Result) {
             $this->statement = $this->initializeStatement($state);
@@ -102,6 +116,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     protected function initializeStatement(ProcessState $state): Result
     {
+        /** @var Options $options */
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
         $sql = $options['sql'];
@@ -121,7 +136,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
             $sql = $qb->getSQL();
         }
-        $params = $options['input_as_params'] ? $state->getInput() : $options['params'];
+
+        /** @var array<string> $inputAsParams */
+        $inputAsParams = $state->getInput();
+        $params = $options['input_as_params'] ? $inputAsParams : $options['params'];
 
         return $connection->executeQuery($sql, $params, $options['types']);
     }
@@ -168,7 +186,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     protected function getConnection(ProcessState $state): Connection
     {
-        /* @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->doctrine->getConnection($this->getOption($state, 'connection'));
+        /** @var Connection $connection */
+        $connection = $this->doctrine->getConnection($this->getOption($state, 'connection'));
+
+        return $connection;
     }
 }

@@ -24,6 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableTaskInterface
 {
+    /** @var array<object> */
     protected array $batch = [];
 
     public function flush(ProcessState $state): void
@@ -60,9 +61,9 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
         }
 
         // Support for multiple entity managers is overkill but might be necessary
+        /** @var \SplObjectStorage<EntityManagerInterface, null> $entityManagers */
         $entityManagers = new \SplObjectStorage();
         foreach ($this->batch as $entity) {
-            /** @var object $entity */
             $class = ClassUtils::getClass($entity);
             $entityManager = $this->doctrine->getManagerForClass($class);
             if (!$entityManager instanceof EntityManagerInterface) {

@@ -22,10 +22,12 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Fetch entities from doctrine.
+ *
+ * @phpstan-import-type Options from AbstractDoctrineQueryTask
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
-    protected ?\IteratorIterator $iterator = null;
+    protected ?\Iterator $iterator = null;
 
     public function __construct(
         protected LoggerInterface $logger,
@@ -41,7 +43,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->iterator instanceof \IteratorIterator) {
+        if (!$this->iterator instanceof \Iterator) {
             return false;
         }
         $this->iterator->next();
@@ -51,8 +53,9 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
 
     public function execute(ProcessState $state): void
     {
+        /** @var Options $options */
         $options = $this->getOptions($state);
-        if (!$this->iterator instanceof \IteratorIterator) {
+        if (!$this->iterator instanceof \Iterator) {
             /** @var class-string $class */
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
@@ -62,10 +65,12 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $repository = $entityManager->getRepository($class);
             $this->initIterator($repository, $options);
         }
-        $result = $this->iterator->current();
+        if ($this->iterator instanceof \Iterator) {
+            $result = $this->iterator->current();
+        }
 
         // Handle empty results
-        if (false === $result) {
+        if (!isset($result) || false === $result) {
             $logContext = [
                 'options' => $options,
             ];
@@ -79,6 +84,12 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         $state->setOutput($result);
     }
 
+    /**
+     * @template TEntityClass of object
+     *
+     * @param EntityRepository<TEntityClass> $repository
+     * @param Options                        $options
+     */
     protected function initIterator(EntityRepository $repository, array $options): void
     {
         $qb = $this->getQueryBuilder(
@@ -89,7 +100,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $options['offset']
         );
 
-        $this->iterator = new \IteratorIterator($qb->getQuery()->toIterable());
+        $this->iterator = new \ArrayIterator(iterator_to_array($qb->getQuery()->toIterable()));
         $this->iterator->rewind();
     }
 }

@@ -20,6 +20,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Easily extendable task to query entities in their repository.
+ *
+ * @phpstan-type Options array{
+ *       'class_name': class-string,
+ *       'criteria': array<string, string|array<string|int>|null>,
+ *       'order_by': array<string, string|null>,
+ *       'limit': ?int,
+ *       'offset': ?int,
+ *       'empty_log_level': string,
+ * }
  */
 abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
 {
@@ -56,6 +65,13 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         );
     }
 
+    /**
+     * @template TEntityClass of object
+     *
+     * @param EntityRepository<TEntityClass>               $repository
+     * @param array<string, string|array<string|int>|null> $criteria
+     * @param array<string, string|null>                   $orderBy
+     */
     protected function getQueryBuilder(
         EntityRepository $repository,
         array $criteria,
@@ -80,7 +96,6 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
                 $qb->setParameter($parameterName, $value);
             }
         }
-        /* @noinspection ForeachSourceInspection */
         foreach ($orderBy as $field => $order) {
             $qb->addOrderBy("e.{$field}", $order);
         }
