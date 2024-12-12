@@ -32,4 +32,3 @@ CleverAge\DoctrineProcessBundle\CleverAgeDoctrineProcessBundle::class => ['all' 
   - [DoctrineRefresherTask]
   - [DoctrineRemoverTask]
   - [DoctrineWriterTask](reference/tasks/doctrine_writer_task.md)
-  - [PurgeDoctrineCacheTask]

@@ -86,11 +86,3 @@ services:
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask:
         alias: cleverage_doctrine_process.task.doctrine_writer
         public: true
-
-    cleverage_doctrine_process.task.purge_doctrine_cache:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\PurgeDoctrineCacheTask
-        arguments:
-            - '@doctrine'
-    CleverAge\DoctrineProcessBundle\Task\EntityManager\PurgeDoctrineCacheTask:
-        alias: cleverage_doctrine_process.task.purge_doctrine_cache
-        public: true
