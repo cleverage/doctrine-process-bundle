@@ -36,7 +36,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *      'paginate': ?int,
  *      'offset': ?int,
  *      'input_as_params': bool,
- *      'params': array<int<0, max>|string, mixed>,
+ *      'params': array<string, mixed>,
  *      'types': array<int, int|string|Type|null>|array<string, int|string|Type|null>
  *   }
  */
@@ -137,10 +137,13 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
             $sql = $qb->getSQL();
         }
 
-        /** @var array<string> $inputAsParams */
         $inputAsParams = $state->getInput();
         $params = $options['input_as_params'] ? $inputAsParams : $options['params'];
+        if (!\is_array($params)) {
+            throw new \UnexpectedValueException('Expecting an array of params');
+        }
 
+        /** @var array<string, mixed> $params */
         return $connection->executeQuery($sql, $params, $options['types']);
     }
 
@@ -186,8 +189,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     protected function getConnection(ProcessState $state): Connection
     {
+        /** @var ?string $connectionOptions */
+        $connectionOptions = $this->getOption($state, 'connection');
         /** @var Connection $connection */
-        $connection = $this->doctrine->getConnection($this->getOption($state, 'connection'));
+        $connection = $this->doctrine->getConnection($connectionOptions);
 
         return $connection;
     }

@@ -30,7 +30,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @phpstan-type Options array{
  *     'sql': string,
  *     'input_as_params': bool,
- *     'params': mixed,
+ *     'params': array<string, mixed>,
  *     'types': array<int, int|string|Type|null>|array<string, int|string|Type|null>
  * }
  */
@@ -60,13 +60,13 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         $options = $this->getOptions($state);
         $connection = $this->getConnection($state);
 
-        /** @var array<string> $inputAsParams */
         $inputAsParams = $state->getInput();
         $params = $options['input_as_params'] ? $inputAsParams : $options['params'];
         if (!\is_array($params)) {
             throw new \UnexpectedValueException('Expecting an array of params');
         }
 
+        /** @var array<string, mixed> $params */
         return (int) $connection->executeStatement($options['sql'], $params, $options['types']);
     }
 
@@ -88,8 +88,10 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
 
     protected function getConnection(ProcessState $state): Connection
     {
+        /** @var ?string $connectionOptions */
+        $connectionOptions = $this->getOption($state, 'connection');
         /** @var Connection $connection */
-        $connection = $this->doctrine->getConnection($this->getOption($state, 'connection'));
+        $connection = $this->doctrine->getConnection($connectionOptions);
 
         return $connection;
     }

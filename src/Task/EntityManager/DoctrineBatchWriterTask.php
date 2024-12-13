@@ -34,7 +34,9 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
 
     public function execute(ProcessState $state): void
     {
-        $this->batch[] = $state->getInput();
+        /** @var object $input */
+        $input = $state->getInput();
+        $this->batch[] = $input;
 
         if (\count($this->batch) >= $this->getOption($state, 'batch_count')) {
             $this->writeBatch($state);

@@ -35,6 +35,7 @@ return (new PhpCsFixer\Config())
         'header_comment' => ['header' => $fileHeaderComment],
         'modernize_strpos' => true,
         'get_class_to_class_keyword' => true,
+        'phpdoc_to_comment' => ['ignored_tags' => ['var']], // Fix issue on initializeStatement method $params variable
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
