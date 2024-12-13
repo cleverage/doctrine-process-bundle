@@ -12,6 +12,7 @@ Forbid "doctrine/dbal" 4 for now (as on "symfony/orm-pack" - symfony/orm-pack@26
 Add "doctrine/common": "^3.0" and "doctrine/doctrine-migrations-bundle": "^3.2"
 * [#4](https://github.com/cleverage/doctrine-process-bundle/issues/4) Remove DoctrineWriterTask option `global_flush` 
 due to removing [partially flush ability](https://github.com/doctrine/orm/blob/3.0.x/UPGRADE.md#bc-break-removed-ability-to-partially-flushcommit-entity-manager-and-unit-of-work) on `doctrine/orm` 3.*
+* [#12](https://github.com/cleverage/doctrine-process-bundle/issues/12) Remove PurgeDoctrineCacheTask
 
 
 ### Changes
