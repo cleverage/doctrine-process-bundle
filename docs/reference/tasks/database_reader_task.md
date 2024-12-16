@@ -1,7 +1,7 @@
 DatabaseReaderTask
 ==================
 
-Reads data from a Doctrine Repository.
+Reads data from a database.
 
 Task reference
 --------------
@@ -12,25 +12,38 @@ Task reference
 Accepted inputs
 ---------------
 
-Input is ignored
+Input can be used as the query params if needed
 
 Possible outputs
 ----------------
 
-Iterate on an entity list returned by a Doctrine query.
+Iterate on an entity list returned by a sql query.
 
 Options
 -------
 
-| Code             | Type | Required | Default | Description                                           |
-|------------------| ---- | :------: | ------- |-------------------------------------------------------|
-| `table`          | `string` | **X** |  | Table                              |
-| `params`       | `array` | | `[]` | List of field => value to use while matching entities |
-| `limit`          | `int` or `null` | | `null` | Result max count                                      |
-| `offset`         | `int` or `null` | | `null` | Result first item offset                              |
-| `entity_manager` | `string` or `null` | | `null` | Use another entity manager than the default           |
+| Code              | Type               | Required | Default   | Description                                                             |
+|-------------------|--------------------|:--------:|-----------|-------------------------------------------------------------------------|
+| `connection`      | `string`           |          | `null`    | Doctrine connection (default if not specified)                          |
+| `table`           | `string`           |  **X**   | `[]`      | Table of the query                                                      |
+| `sql`             | `string`           |          | `null`    | Query to execute (if not specified then: "select tbl.* from table tbl") |
+| `limit`           | `int` or `null`    |          | `null`    | Result max count                                                        |
+| `offset`          | `int` or `null`    |          | `null`    | Result first item offset                                                |
+| `paginate`        | `int` or `null`    |          | `null`    | Paginate the results                                                    |
+| `input_as_params` | `bool`             |          | `false`   | Use the input as params                                                 |
+| `params`          | `array`            |          | `[]`      | Query params                                                            |
+| `types`           | `array`            |          | `[]`      | Query params types                                                      |
+| `empty_log_level` | `string` or `null` |          | `warning` | Log level if the result set is empty                                    |
 
 Example
 -------
 
-https://github.com/cleverage/process-bundle-demo/blob/main/config/packages/process/demo.doctrine.read.yaml
+```yaml
+entry:
+    service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
+    options:
+        table: 'book'
+        limit: 10
+        offset: 3
+        empty_log_level: debug
+```
