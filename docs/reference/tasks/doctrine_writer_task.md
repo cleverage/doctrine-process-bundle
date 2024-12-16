@@ -11,17 +11,17 @@ Task reference
 Accepted inputs
 ---------------
 
-Any doctrine managed entity.
+`object`: Doctrine managed entity
 
 Possible outputs
 ----------------
 
-Re-output given entity.
+`object`: Re-outputs given entity
 
 Options
 -------
 
-None
+`None`
 
 Example
 -------

@@ -11,12 +11,12 @@ Task reference
 Accepted inputs
 ---------------
 
-None.
+`None`
 
 Possible outputs
 ----------------
 
-Outputs the result set of the entities.
+`array`: Result set of the entities
 
 Options
 -------

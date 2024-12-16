@@ -11,12 +11,12 @@ Task reference
 Accepted inputs
 ---------------
 
-Ignored
+`None`
 
 Possible outputs
 ----------------
 
-None
+`None`
 
 Options
 -------

@@ -11,12 +11,12 @@ Task reference
 Accepted inputs
 ---------------
 
-An array of entities
+`array`: Entities to be persisted in the database
 
 Possible outputs
 ----------------
 
-The batch of the entities persisted to the database
+`array`: Batch of the entities persisted to the database
 
 Options
 -------

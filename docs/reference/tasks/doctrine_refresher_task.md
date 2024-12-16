@@ -11,12 +11,12 @@ Task reference
 Accepted inputs
 ---------------
 
-Any doctrine managed entity.
+`object`: Doctrine managed entity
 
 Possible outputs
 ----------------
 
-The refreshed entity
+`object`: The refreshed entity
 
 Options
 -------

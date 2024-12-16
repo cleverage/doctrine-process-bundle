@@ -12,12 +12,12 @@ Task reference
 Accepted inputs
 ---------------
 
-`array` Input can be used as the query params if needed
+`array`or `None`: Input can be used as the query params if needed
 
 Possible outputs
 ----------------
 
-Iterate on an entity list returned by a sql query.
+`array`: Rows returned by the query.
 
 Options
 -------

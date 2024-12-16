@@ -11,7 +11,7 @@ Task reference
 Accepted inputs
 ---------------
 
-A doctrine entity
+`object`: Entity to be persisted in the database
 
 Possible outputs
 ----------------
