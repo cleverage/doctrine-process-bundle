@@ -1,7 +1,7 @@
 DoctrineWriterTask
 ==================
 
-Write a Doctrine entity to the database.
+Writes a Doctrine entity to the database.
 
 Task reference
 --------------
