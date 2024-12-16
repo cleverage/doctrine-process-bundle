@@ -27,8 +27,8 @@ CleverAge\DoctrineProcessBundle\CleverAgeDoctrineProcessBundle::class => ['all' 
   - [ClearEntityManagerTask](reference/tasks/doctrine_clear_task.md))
   - [DoctrineBatchWriterTask](reference/tasks/doctrine_batchwriter_task.md)
   - [DoctrineCleanerTask](reference/tasks/doctrine_cleaner_task.md)
-  - [DoctrineDetacherTask]
+  - [DoctrineDetacherTask](reference/tasks/doctrine_detacher_task.md)
   - [DoctrineReaderTask]
-  - [DoctrineRefresherTask]
-  - [DoctrineRemoverTask]
+  - [DoctrineRefresherTask](reference/tasks/doctrine_refresher_task.md)
+  - [DoctrineRemoverTask](reference/tasks/doctrine_remover_task.md)
   - [DoctrineWriterTask](reference/tasks/doctrine_writer_task.md)

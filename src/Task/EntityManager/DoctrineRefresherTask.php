@@ -18,7 +18,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Detach Doctrine entities from unit of work.
+ * Refreshes a Doctrine entity from the database.
  */
 class DoctrineRefresherTask extends AbstractDoctrineTask
 {
