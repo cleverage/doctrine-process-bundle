@@ -26,7 +26,7 @@ class DoctrineCleanerTask extends AbstractDoctrineTask
     {
         $entity = $state->getInput();
         if (null === $entity) {
-            throw new \RuntimeException('DoctrineWriterTask does not allow null input');
+            throw new \RuntimeException('DoctrineCleanerTask does not allow null input');
         }
         /** @var object $entity */
         $class = ClassUtils::getClass($entity);
