@@ -36,7 +36,8 @@ Example
 -------
 
 ```yaml
-entry:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
   options:
     class_name: 'App\Entity\Author'

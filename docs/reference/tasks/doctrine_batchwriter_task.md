@@ -29,7 +29,8 @@ Example
 -------
 
 ```yaml
-batch_write:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
   options:
     batch_count: 2

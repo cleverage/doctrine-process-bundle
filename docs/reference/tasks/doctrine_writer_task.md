@@ -27,6 +27,7 @@ Example
 -------
 
 ```yaml
-write:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask'
 ```

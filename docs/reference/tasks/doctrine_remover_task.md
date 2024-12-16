@@ -27,6 +27,7 @@ Example
 -------
 
 ```yaml
-remover:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask'
 ```

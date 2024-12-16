@@ -33,7 +33,8 @@ Example
 -------
 
 ```yaml
-entry:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask'
   options:
     sql: 'update author set firstname = :firstname, lastname = :lastname'

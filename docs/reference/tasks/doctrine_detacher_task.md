@@ -27,6 +27,7 @@ Example
 -------
 
 ```yaml
-detach:
+# Task configuration level
+code:
   service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask'
 ```

@@ -27,6 +27,7 @@ Example
 -------
 
 ```yaml
-refresh:
+# Task configuration level
+code:
     service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask'
 ```
