@@ -29,30 +29,8 @@ Example
 -------
 
 ```yaml
-entry:
-  service: '@CleverAge\ProcessBundle\Task\ConstantIterableOutputTask'
+batch_write:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
   options:
-    output:
-      - author1:
-          firstname: Firstname 1
-          lastname: Lastname
-      - author2:
-          firstname: Firstname 2
-          lastname: Lastname
-      - author3:
-          firstname: Firstname 3
-          lastname: Lastname
-  outputs: [iterate]
-  iterate:
-    service: '@CleverAge\ProcessBundle\Task\InputIteratorTask'
-    outputs: [denormalizer]
-  denormalizer:
-    service: '@CleverAge\ProcessBundle\Task\Serialization\DenormalizerTask'
-    options:
-      class: App\Entity\Author
-    outputs: [batch_write]
-  batch_write:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
-    options:
-      batch_count: 2
+    batch_count: 2
 ```

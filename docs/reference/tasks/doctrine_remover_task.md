@@ -27,16 +27,6 @@ Example
 -------
 
 ```yaml
-entry:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
-  options:
-    class_name: 'App\Entity\Book'
-    criteria:
-      title: 'Dracula'
-  outputs: [dump]
-  dump:
-    service: '@CleverAge\ProcessBundle\Task\Debug\DebugTask'
-    outputs: [remover]
-  remover:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask'
+remover:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask'
 ```

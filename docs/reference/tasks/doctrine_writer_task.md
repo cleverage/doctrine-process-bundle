@@ -27,25 +27,6 @@ Example
 -------
 
 ```yaml
-entry:
-  service: '@CleverAge\ProcessBundle\Task\ConstantOutputTask'
-  options:
-    output:
-      firstname: Isaac
-      lastname: Asimov
-  outputs: [denormalize]
-  denormalize:
-    service: '@CleverAge\ProcessBundle\Task\Serialization\DenormalizerTask'
-    options:
-      class: App\Entity\Author
-    outputs: [save]
-  save:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask'
-    outputs: [fetch]
-  fetch:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
-    options:
-      class_name: 'App\Entity\Author'
-      criteria:
-        lastname: 'Asimov'
+write:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask'
 ```

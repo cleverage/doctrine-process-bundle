@@ -27,16 +27,6 @@ Example
 -------
 
 ```yaml
-entry:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
-  options:
-    class_name: 'App\Entity\Author'
-    criteria:
-      lastname: 'King'
-    order_by:
-      lastname: 'asc'
-  outputs: [clean]
-
-  clean:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask'
+clean:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask'
 ```
