@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -26,8 +26,9 @@ class DoctrineCleanerTask extends AbstractDoctrineTask
     {
         $entity = $state->getInput();
         if (null === $entity) {
-            throw new \RuntimeException('DoctrineWriterTask does not allow null input');
+            throw new \RuntimeException('DoctrineCleanerTask does not allow null input');
         }
+        /** @var object $entity */
         $class = ClassUtils::getClass($entity);
         $entityManager = $this->doctrine->getManagerForClass($class);
         if (!$entityManager instanceof EntityManagerInterface) {

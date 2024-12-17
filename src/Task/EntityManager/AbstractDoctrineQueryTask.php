@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,6 +20,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Easily extendable task to query entities in their repository.
+ *
+ * @phpstan-type Options array{
+ *       'class_name': class-string,
+ *       'criteria': array<string, string|array<string|int>|null>,
+ *       'order_by': array<string, string|null>,
+ *       'limit': ?int,
+ *       'offset': ?int,
+ *       'empty_log_level': string,
+ * }
  */
 abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
 {
@@ -56,19 +65,26 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         );
     }
 
+    /**
+     * @template TEntityClass of object
+     *
+     * @param EntityRepository<TEntityClass>               $repository
+     * @param array<string, string|array<string|int>|null> $criteria
+     * @param array<string, string|null>                   $orderBy
+     */
     protected function getQueryBuilder(
         EntityRepository $repository,
         array $criteria,
         array $orderBy,
-        int $limit = null,
-        int $offset = null
+        ?int $limit = null,
+        ?int $offset = null,
     ): QueryBuilder {
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
                 throw new \UnexpectedValueException("Forbidden field name '{$field}'");
             }
-            $parameterName = uniqid('param', true);
+            $parameterName = 'param_'.bin2hex(random_bytes(4));
             if (null === $value) {
                 $qb->andWhere("e.{$field} IS null");
             } else {
@@ -80,7 +96,6 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
                 $qb->setParameter($parameterName, $value);
             }
         }
-        /* @noinspection ForeachSourceInspection */
         foreach ($orderBy as $field => $order) {
             $qb->addOrderBy("e.{$field}", $order);
         }

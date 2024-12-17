@@ -3,23 +3,30 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Core\ValueObject\PhpVersion;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Set\ValueObject\LevelSetList;
-use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonyLevelSetList;
+use Rector\Symfony\Set\SymfonySetList;
+use Rector\ValueObject\PhpVersion;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->parallel();
-    $rectorConfig->importNames();
-    $rectorConfig->importShortClasses();
-
-    $rectorConfig->paths([__DIR__.'/src']);
-
-    $rectorConfig->sets([
-        SetList::TYPE_DECLARATION,
+return RectorConfig::configure()
+    ->withPhpVersion(PhpVersion::PHP_82)
+    ->withPaths([
+        __DIR__.'/src',
+        __DIR__.'/tests',
+    ])
+    ->withPhpSets(php82: true)
+    // here we can define, what prepared sets of rules will be applied
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true
+    )
+    ->withSets([
         LevelSetList::UP_TO_PHP_82,
-        SymfonyLevelSetList::UP_TO_SYMFONY_63,
-    ]);
-
-    $rectorConfig->phpVersion(PhpVersion::PHP_82);
-};
+        SymfonySetList::SYMFONY_64,
+        SymfonySetList::SYMFONY_71,
+        SymfonySetList::SYMFONY_CODE_QUALITY,
+        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
+        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
+        DoctrineSetList::DOCTRINE_CODE_QUALITY,
+    ])
+;

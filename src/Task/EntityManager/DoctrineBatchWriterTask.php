@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,6 +24,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableTaskInterface
 {
+    /** @var array<object> */
     protected array $batch = [];
 
     public function flush(ProcessState $state): void
@@ -33,7 +34,9 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
 
     public function execute(ProcessState $state): void
     {
-        $this->batch[] = $state->getInput();
+        /** @var object $input */
+        $input = $state->getInput();
+        $this->batch[] = $input;
 
         if (\count($this->batch) >= $this->getOption($state, 'batch_count')) {
             $this->writeBatch($state);
@@ -53,13 +56,14 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
 
     protected function writeBatch(ProcessState $state): void
     {
-        if (0 === \count($this->batch)) {
+        if ([] === $this->batch) {
             $state->setSkipped(true);
 
             return;
         }
 
         // Support for multiple entity managers is overkill but might be necessary
+        /** @var \SplObjectStorage<EntityManagerInterface, null> $entityManagers */
         $entityManagers = new \SplObjectStorage();
         foreach ($this->batch as $entity) {
             $class = ClassUtils::getClass($entity);

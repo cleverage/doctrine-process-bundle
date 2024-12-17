@@ -39,30 +39,40 @@
         }
     ],
     "autoload": {
-        "psr-4": {
-            "CleverAge\\DoctrineProcessBundle\\": "src/"
-        }
+      "psr-4": {
+        "CleverAge\\DoctrineProcessBundle\\": "src/"
+      }
+    },
+    "autoload-dev": {
+      "psr-4": {
+        "CleverAge\\DoctrineProcessBundle\\Tests\\": "tests/"
+      }
     },
     "require": {
-        "cleverage/process-bundle": "dev-v4-dev",
-        "doctrine/orm": "^2",
-        "doctrine/doctrine-bundle": "^2"
+        "php": ">=8.1",
+        "cleverage/process-bundle": "^4.0",
+        "doctrine/common": "^3.0",
+        "doctrine/dbal": "^2.9 || ^3.0",
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.9 || ^3.0"
     },
     "require-dev": {
       "friendsofphp/php-cs-fixer": "*",
-      "roave/security-advisories": "dev-latest",
-      "phpunit/phpunit": "*",
+      "phpstan/extension-installer": "*",
       "phpstan/phpstan": "*",
       "phpstan/phpstan-symfony": "*",
-      "phpstan/extension-installer": "*",
+      "phpunit/phpunit": "<10.0",
       "rector/rector": "*",
+      "roave/security-advisories": "dev-latest",
       "symfony/test-pack": "^1.1"
     },
     "config": {
-      "sort-packages": true,
       "allow-plugins": {
         "phpstan/extension-installer": true,
-        "symfony/flex": true
-      }
+        "symfony/flex": true,
+        "symfony/runtime": true
+      },
+      "sort-packages": true
     }
 }

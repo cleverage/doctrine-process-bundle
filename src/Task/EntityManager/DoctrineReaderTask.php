@@ -5,7 +5,7 @@ declare(strict_types=1);
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
- * Copyright (c) 2017-2023 Clever-Age
+ * Copyright (c) Clever-Age
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,20 +17,21 @@ use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 
 /**
  * Fetch entities from doctrine.
+ *
+ * @phpstan-import-type Options from AbstractDoctrineQueryTask
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
-    protected ?IterableResult $iterator = null;
+    protected ?\Iterator $iterator = null;
 
     public function __construct(
         protected LoggerInterface $logger,
-        ManagerRegistry $doctrine
+        ManagerRegistry $doctrine,
     ) {
         parent::__construct($doctrine);
     }
@@ -42,7 +43,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
      */
     public function next(ProcessState $state): bool
     {
-        if (!$this->iterator) {
+        if (!$this->iterator instanceof \Iterator) {
             return false;
         }
         $this->iterator->next();
@@ -52,24 +53,24 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
 
     public function execute(ProcessState $state): void
     {
+        /** @var Options $options */
         $options = $this->getOptions($state);
-        if (!$this->iterator) {
+        if (!$this->iterator instanceof \Iterator) {
+            /** @var class-string $class */
             $class = $options['class_name'];
             $entityManager = $this->doctrine->getManagerForClass($class);
             if (!$entityManager instanceof EntityManagerInterface) {
                 throw new \UnexpectedValueException("No manager found for class {$class}");
             }
             $repository = $entityManager->getRepository($class);
-            if (!$repository instanceof EntityRepository) {
-                throw new \UnexpectedValueException("No repository found for class {$class}");
-            }
             $this->initIterator($repository, $options);
         }
-
-        $result = $this->iterator->current();
+        if ($this->iterator instanceof \Iterator) {
+            $result = $this->iterator->current();
+        }
 
         // Handle empty results
-        if (false === $result) {
+        if (!isset($result) || false === $result) {
             $logContext = [
                 'options' => $options,
             ];
@@ -80,9 +81,15 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             return;
         }
 
-        $state->setOutput(reset($result));
+        $state->setOutput($result);
     }
 
+    /**
+     * @template TEntityClass of object
+     *
+     * @param EntityRepository<TEntityClass> $repository
+     * @param Options                        $options
+     */
     protected function initIterator(EntityRepository $repository, array $options): void
     {
         $qb = $this->getQueryBuilder(
@@ -93,8 +100,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $options['offset']
         );
 
-        $this->iterator = $qb->getQuery()
-            ->iterate();
-        $this->iterator->next(); // Move to first element
+        $this->iterator = new \ArrayIterator(iterator_to_array($qb->getQuery()->toIterable()));
+        $this->iterator->rewind();
     }
 }
