@@ -55,18 +55,18 @@
         "doctrine/dbal": "^2.9 || ^3.0",
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
-        "doctrine/orm": "^2.9 || ^3.0",
-        "phpstan/phpstan-doctrine": "^2.0"
+        "doctrine/orm": "^2.9 || ^3.0"
     },
     "require-dev": {
-      "friendsofphp/php-cs-fixer": "*",
-      "phpstan/extension-installer": "*",
-      "phpstan/phpstan": "*",
-      "phpstan/phpstan-symfony": "*",
-      "phpunit/phpunit": "<10.0",
-      "rector/rector": "*",
-      "roave/security-advisories": "dev-latest",
-      "symfony/test-pack": "^1.1"
+        "friendsofphp/php-cs-fixer": "*",
+        "phpstan/extension-installer": "*",
+        "phpstan/phpstan": "*",
+        "phpstan/phpstan-doctrine": "^2.0",
+        "phpstan/phpstan-symfony": "*",
+        "phpunit/phpunit": "<10.0",
+        "rector/rector": "*",
+        "roave/security-advisories": "dev-latest",
+        "symfony/test-pack": "^1.1"
     },
     "config": {
       "allow-plugins": {
