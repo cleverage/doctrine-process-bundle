@@ -6,6 +6,7 @@ services:
 
     cleverage_doctrine_process.task.database_reader:
         class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask
+        shared: false
         arguments:
             - '@monolog.logger'
             - '@doctrine'
@@ -15,6 +16,7 @@ services:
 
     cleverage_doctrine_process.task.database_updater:
         class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask
+        shared: false
         arguments:
             - '@doctrine'
             - '@monolog.logger'
@@ -24,6 +26,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_clear_entity_manager:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask:
@@ -32,6 +35,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_batch_writer:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask:
@@ -40,6 +44,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_cleaner:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask:
@@ -48,6 +53,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_detacher:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask:
@@ -56,6 +62,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_reader:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask
+        shared: false
         arguments:
             - '@monolog.logger'
             - '@doctrine'
@@ -65,6 +72,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_refresher:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask:
@@ -73,6 +81,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_remover:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask:
@@ -81,6 +90,7 @@ services:
 
     cleverage_doctrine_process.task.doctrine_writer:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask
+        shared: false
         arguments:
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask:
