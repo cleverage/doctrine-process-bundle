@@ -1,3 +1,10 @@
+v2.0.1
+------
+
+### Fixes
+
+* [#16](https://github.com/cleverage/doctrine-process-bundle/issues/16) Add missing shared: false on tasks
+
 v2.0
 ------
 
