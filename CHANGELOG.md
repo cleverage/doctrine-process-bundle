@@ -1,3 +1,10 @@
+v2.1
+------
+
+### Changes
+
+* [#18](https://github.com/cleverage/doctrine-process-bundle/issues/18) Upgrade to Symfony 7.3 & PHP 8.4
+
 v2.0.1
 ------
 
