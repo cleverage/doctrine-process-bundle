@@ -26,7 +26,6 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PHP8x2Migration' => true,
         '@PHPUnit7x5Migration:risky' => true,
-        '@PHPUnit75Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
         '@DoctrineAnnotation' => true,
