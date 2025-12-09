@@ -24,8 +24,8 @@ $fileHeaderComment = <<<'EOF'
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        '@PHP71Migration' => true,
-        '@PHP82Migration' => true,
+        '@PHP8x2Migration' => true,
+        '@PHPUnit7x5Migration:risky' => true,
         '@PHPUnit75Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
@@ -35,7 +35,7 @@ return (new PhpCsFixer\Config())
         'header_comment' => ['header' => $fileHeaderComment],
         'modernize_strpos' => true,
         'get_class_to_class_keyword' => true,
-        'phpdoc_to_comment' => ['ignored_tags' => ['var']], // Fix issue on initializeStatement method $params variable
+        'phpdoc_to_comment' => ['ignored_tags' => ['var']], // Fix an issue on initializeStatement method $params variable
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
