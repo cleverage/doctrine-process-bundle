@@ -72,7 +72,7 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
                 throw new \UnexpectedValueException("No manager found for class {$class}");
             }
             $entityManager->persist($entity);
-            $entityManagers->attach($entityManager);
+            $entityManagers->offsetSet($entityManager);
         }
 
         foreach ($entityManagers as $entityManager) {
