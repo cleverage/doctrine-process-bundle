@@ -7,3 +7,4 @@
 .phpunit.cache
 .php-cs-fixer.cache
 coverage-report
+GEMINI.md
