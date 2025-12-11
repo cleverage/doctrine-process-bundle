@@ -23,9 +23,12 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DoctrineBatchWriterTask::class)]
 class DoctrineBatchWriterTaskTest extends TestCase
 {
+    /**
+     * @param array<string, mixed> $options
+     */
     protected function getTask(array $options = [], ?ManagerRegistry $managerRegistry = null): DoctrineBatchWriterTask
     {
-        if (!$managerRegistry instanceof \Doctrine\Persistence\ManagerRegistry) {
+        if (!$managerRegistry instanceof ManagerRegistry) {
             $managerRegistry = $this->createStub(ManagerRegistry::class);
         }
         $task = new DoctrineBatchWriterTask($managerRegistry);
@@ -50,8 +53,8 @@ class DoctrineBatchWriterTaskTest extends TestCase
 
         $reflection = new \ReflectionClass(DoctrineBatchWriterTask::class);
         $batchProperty = $reflection->getProperty('batch');
-        $this->assertCount(1, $batchProperty->getValue($task));
-        $this->assertContains($entity1, $batchProperty->getValue($task));
+        $this->assertCount(1, (array) $batchProperty->getValue($task));
+        $this->assertContains($entity1, (array) $batchProperty->getValue($task));
     }
 
     public function testExecuteFlushesBatchWhenBatchCountReached(): void
@@ -77,12 +80,12 @@ class DoctrineBatchWriterTaskTest extends TestCase
         $batchProperty = $reflection->getProperty('batch');
         // Add first entity
         $task->execute($state); // batch has 1 entity, not flushed
-        $this->assertCount(1, $batchProperty->getValue($task));
-        $this->assertContains($entity1, $batchProperty->getValue($task));
+        $this->assertCount(1, (array) $batchProperty->getValue($task));
+        $this->assertContains($entity1, (array) $batchProperty->getValue($task));
 
         // Add second entity, should trigger flush
         $task->execute($state); // batch has 2 entities, should be flushed
-        $this->assertCount(0, $batchProperty->getValue($task)); // Batch should be empty after flush
+        $this->assertCount(0, (array) $batchProperty->getValue($task)); // Batch should be empty after flush
     }
 
     public function testFlushCallsWriteBatch(): void
@@ -160,7 +163,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
         $writeBatchMethod = $reflection->getMethod('writeBatch');
         $writeBatchMethod->invoke($task, $state);
 
-        $this->assertCount(0, $batchProperty->getValue($task)); // Batch should be empty
+        $this->assertCount(0, (array) $batchProperty->getValue($task)); // Batch should be empty
     }
 
     public function testWriteBatchSetsOutput(): void
