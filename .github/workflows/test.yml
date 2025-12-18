@@ -24,13 +24,13 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
-        dependencies: [highest]
+        dependencies: [highest, lowest]
         allowed-to-fail: [false]
         symfony-require: ['']
         variant: [normal]
         include:
           - php-version: '8.2'
-            dependencies: highest
+            dependencies: lowest
             allowed-to-fail: false
             symfony-require: 6.4.*
             variant: symfony/symfony:"6.4.*"
