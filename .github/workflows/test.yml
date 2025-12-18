@@ -37,6 +37,11 @@ jobs:
           - php-version: '8.2'
             dependencies: highest
             allowed-to-fail: false
+            symfony-require: 6.4.*
+            variant: symfony/symfony:"6.4.*"
+          - php-version: '8.2'
+            dependencies: highest
+            allowed-to-fail: false
             symfony-require: 7.4.*
             variant: symfony/symfony:"7.4.*"
           - php-version: '8.3'
