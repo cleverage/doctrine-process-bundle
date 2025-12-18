@@ -65,14 +65,17 @@ class DoctrineReaderTaskTest extends TestCase
         $doctrine->method('getManagerForClass')->willReturn($em);
 
         $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            private array $testOptions;
-
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, array $testOptions)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
             {
                 parent::__construct($logger, $doctrine);
-                $this->testOptions = $testOptions;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
@@ -119,14 +122,17 @@ class DoctrineReaderTaskTest extends TestCase
         $doctrine->method('getManagerForClass')->willReturn($em);
 
         $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            private array $testOptions;
-
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, array $testOptions)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
             {
                 parent::__construct($logger, $doctrine);
-                $this->testOptions = $testOptions;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
@@ -173,14 +179,17 @@ class DoctrineReaderTaskTest extends TestCase
         $doctrine->method('getManagerForClass')->willReturn($em);
 
         $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            private array $testOptions;
-
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, array $testOptions)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
             {
                 parent::__construct($logger, $doctrine);
-                $this->testOptions = $testOptions;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
@@ -192,13 +201,14 @@ class DoctrineReaderTaskTest extends TestCase
         $call = 0;
         $state->expects($this->exactly(2))->method('setOutput')
             ->with($this->callback(function ($output) use (&$call, $entity1, $entity2) {
-                if ($call === 0) {
+                if (0 === $call) {
                     $this->assertSame($entity1, $output);
                 }
-                if ($call === 1) {
+                if (1 === $call) {
                     $this->assertSame($entity2, $output);
                 }
-                $call++;
+                ++$call;
+
                 return true;
             }));
 
@@ -227,14 +237,17 @@ class DoctrineReaderTaskTest extends TestCase
         $doctrine->method('getManagerForClass')->willReturn(null);
 
         $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            private array $testOptions;
-
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, array $testOptions)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
             {
                 parent::__construct($logger, $doctrine);
-                $this->testOptions = $testOptions;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;

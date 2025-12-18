@@ -43,22 +43,23 @@ class DatabaseUpdaterTaskTest extends TestCase
             ->willReturn(1);
 
         $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            private array $testOptions;
-            private \Doctrine\DBAL\Connection $testConnection;
-
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, array $testOptions, \Doctrine\DBAL\Connection $testConnection)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
             {
                 parent::__construct($doctrine, $logger);
-                $this->testOptions = $testOptions;
-                $this->testConnection = $testConnection;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
             }
 
-            protected function getConnection(?ProcessState $state = null): \Doctrine\DBAL\Connection
+            protected function getConnection(?ProcessState $state = null): Connection
             {
                 return $this->testConnection;
             }
@@ -91,22 +92,23 @@ class DatabaseUpdaterTaskTest extends TestCase
             ->willReturn(1);
 
         $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            private array $testOptions;
-            private \Doctrine\DBAL\Connection $testConnection;
-
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, array $testOptions, \Doctrine\DBAL\Connection $testConnection)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
             {
                 parent::__construct($doctrine, $logger);
-                $this->testOptions = $testOptions;
-                $this->testConnection = $testConnection;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
             }
 
-            protected function getConnection(?ProcessState $state = null): \Doctrine\DBAL\Connection
+            protected function getConnection(?ProcessState $state = null): Connection
             {
                 return $this->testConnection;
             }
@@ -134,26 +136,27 @@ class DatabaseUpdaterTaskTest extends TestCase
             'types' => [],
             'connection' => null,
         ];
-        
+
         $connection = $this->createStub(Connection::class);
 
         $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            private array $testOptions;
-            private \Doctrine\DBAL\Connection $testConnection;
-
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, array $testOptions, \Doctrine\DBAL\Connection $testConnection)
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
             {
                 parent::__construct($doctrine, $logger);
-                $this->testOptions = $testOptions;
-                $this->testConnection = $testConnection;
             }
 
+            /**
+             * @return array<string, mixed>
+             */
             protected function getOptions(?ProcessState $state = null): array
             {
                 return $this->testOptions;
             }
 
-            protected function getConnection(?ProcessState $state = null): \Doctrine\DBAL\Connection
+            protected function getConnection(?ProcessState $state = null): Connection
             {
                 return $this->testConnection;
             }
