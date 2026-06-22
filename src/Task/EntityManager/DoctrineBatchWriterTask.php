@@ -45,6 +45,7 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
         }
     }
 
+    #[\Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
