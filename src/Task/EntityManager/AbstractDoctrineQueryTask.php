@@ -32,6 +32,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
 {
+    #[\Override]
     protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

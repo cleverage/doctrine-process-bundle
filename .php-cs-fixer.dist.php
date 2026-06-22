@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the CleverAge/DoctrineProcessBundle package.
  *
@@ -36,6 +38,7 @@ return (new PhpCsFixer\Config())
         'modernize_strpos' => true,
         'get_class_to_class_keyword' => true,
         'phpdoc_to_comment' => ['ignored_tags' => ['var']], // Fix issue on initializeStatement method $params variable
+        'declare_strict_types' => true,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
