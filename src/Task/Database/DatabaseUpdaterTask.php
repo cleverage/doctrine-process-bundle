@@ -15,8 +15,10 @@ namespace CleverAge\DoctrineProcessBundle\Task\Database;
 
 use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\ProcessState;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
@@ -31,7 +33,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *     'sql': string,
  *     'input_as_params': bool,
  *     'params': array<string, mixed>,
- *     'types': array<int, int|string|Type|null>|array<string, int|string|Type|null>
+ *     'types': array<int<0, max>|string, ArrayParameterType|ParameterType|Type|string>
  * }
  */
 class DatabaseUpdaterTask extends AbstractConfigurableTask

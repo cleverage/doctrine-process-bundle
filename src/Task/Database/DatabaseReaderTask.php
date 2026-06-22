@@ -17,7 +17,9 @@ use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\FinalizableTaskInterface;
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,7 +39,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *      'offset': ?int,
  *      'input_as_params': bool,
  *      'params': array<string, mixed>,
- *      'types': array<int, int|string|Type|null>|array<string, int|string|Type|null>
+ *      'types': array<int<0, max>|string, ArrayParameterType|ParameterType|Type|string>
  *   }
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface

@@ -23,13 +23,14 @@ jobs:
           - '8.2'
           - '8.3'
           - '8.4'
-        dependencies: [highest]
+          - '8.5'
+        dependencies: [highest, lowest]
         allowed-to-fail: [false]
         symfony-require: ['']
         variant: [normal]
         include:
-          - php-version: '8.1'
-            dependencies: highest
+          - php-version: '8.2'
+            dependencies: lowest
             allowed-to-fail: false
             symfony-require: 6.4.*
             variant: symfony/symfony:"6.4.*"
@@ -63,7 +64,26 @@ jobs:
             allowed-to-fail: false
             symfony-require: 7.4.*
             variant: symfony/symfony:"7.4.*"
-
+          - php-version: '8.4'
+            dependencies: highest
+            allowed-to-fail: false
+            symfony-require: 8.*
+            variant: symfony/symfony:"8.*"
+          - php-version: '8.5'
+            dependencies: highest
+            allowed-to-fail: false
+            symfony-require: 6.4.*
+            variant: symfony/symfony:"6.4.*"
+          - php-version: '8.5'
+            dependencies: highest
+            allowed-to-fail: false
+            symfony-require: 7.4.*
+            variant: symfony/symfony:"7.4.*"
+          - php-version: '8.5'
+            dependencies: highest
+            allowed-to-fail: false
+            symfony-require: 8.*
+            variant: symfony/symfony:"8.*"
     steps:
       - name: Checkout
         uses: actions/checkout@v7
