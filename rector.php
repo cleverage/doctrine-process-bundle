@@ -15,13 +15,11 @@ return RectorConfig::configure()
     ])
     ->withPhpSets(php82: true)
     // here we can define what prepared sets of rules will be applied
-    ->withComposerBased(doctrine: true)
+    ->withComposerBased(doctrine: true, phpunit: true, symfony: true)
     ->withPreparedSets(deadCode: true, codeQuality: true, doctrineCodeQuality: true, symfonyCodeQuality: true)
     ->withAttributesSets(symfony: true, doctrine: true)
     ->withSets([
         LevelSetList::UP_TO_PHP_82,
-        SymfonySetList::SYMFONY_64,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ])
 ;

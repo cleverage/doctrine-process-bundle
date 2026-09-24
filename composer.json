@@ -54,7 +54,12 @@
         "doctrine/common": "^3.5",
         "doctrine/doctrine-bundle": "^2.18 || ^3.1",
         "doctrine/doctrine-migrations-bundle": "^3.7 || ^4",
-        "doctrine/orm": "^2.20 || ^3.5"
+        "doctrine/orm": "^2.20 || ^3.5",
+        "symfony/config": "^6.4 || ^7.4 || ^8",
+        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8",
+        "symfony/finder": "^6.4 || ^7.4 || ^8",
+        "symfony/http-kernel": "^6.4 || ^7.4 || ^8",
+        "symfony/options-resolver": "^6.4 || ^7.4 || ^8"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "*",
@@ -62,7 +67,7 @@
         "phpstan/phpstan": "*",
         "phpstan/phpstan-doctrine": "*",
         "phpstan/phpstan-symfony": "*",
-        "phpunit/phpunit": "*",
+        "phpunit/phpunit": "^10.5 || ^11 || ^12 || ^13",
         "rector/rector": "*",
         "roave/security-advisories": "dev-latest",
         "symfony/test-pack": "^1.1"
