@@ -110,4 +110,3 @@ Notes
   `ids: !php/enum Doctrine\DBAL\ArrayParameterType::INTEGER` with Doctrine DBAL 4.
 * The task is designed to be executed once per process run (typically as the entry point): if it receives a new input
   after having iterated over all the rows, that input only resets the task, which is skipped.
-* With `paginate`, the row following each full page is currently not output.
