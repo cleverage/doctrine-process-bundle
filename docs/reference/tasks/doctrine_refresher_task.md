@@ -1,7 +1,7 @@
 DoctrineRefresherTask
 =====================
 
-Refreshes a Doctrine entity from the entity manager
+Refreshes the entity received as input from the database, overwriting any unsaved change made to it, then outputs it.
 
 Task reference
 --------------
@@ -11,23 +11,43 @@ Task reference
 Accepted inputs
 ---------------
 
-`object`: Doctrine managed entity
+`object`: a Doctrine managed entity. A `null` input throws a `\RuntimeException`, and an object whose class is not
+managed by any entity manager throws an `\UnexpectedValueException`. Underlying method is Doctrine
+`EntityManager::refresh()`, which fails if the entity is not managed.
 
 Possible outputs
 ----------------
 
-`object`: The refreshed entity
+`object`: the refreshed entity.
 
 Options
 -------
 
-None
+| Code             | Type           | Required | Default | Description                                                                                                  |
+|------------------|----------------|:--------:|---------|--------------------------------------------------------------------------------------------------------------|
+| `entity_manager` | `string\|null` |          | `null`  | Inherited from the base Doctrine task but not used: the entity manager is the one managing the input's class |
 
-Example
--------
+Examples
+--------
+
+* Modify an entity, then discard the change by refreshing it
 
 ```yaml
 # Task configuration level
-code:
-    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask'
+read_authors:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  options:
+    class_name: 'App\Entity\Author'
+    criteria:
+      lastname: 'King'
+  outputs: [modify]
+modify:
+  service: '@CleverAge\ProcessBundle\Task\PropertySetterTask'
+  options:
+    values:
+      firstname: 'Gérard'
+  outputs: [refresh]
+refresh:
+  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask'
+  outputs: [next_task]
 ```
