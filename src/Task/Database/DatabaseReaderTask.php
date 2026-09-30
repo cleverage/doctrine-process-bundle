@@ -99,11 +99,10 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         }
 
         if (null !== $options['paginate']) {
-            $results = [];
-            $i = 0;
-            while (false !== $result && $i++ < $options['paginate']) {
+            $results = [$result];
+            // Stop fetching as soon as the page is full: a row fetched beyond it would be lost
+            while (\count($results) < $options['paginate'] && false !== ($result = $this->statement->fetchAssociative())) {
                 $results[] = $result;
-                $result = $this->statement->fetchAssociative();
             }
             $state->setOutput($results);
         } else {

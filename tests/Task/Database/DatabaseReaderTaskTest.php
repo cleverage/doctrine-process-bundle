@@ -140,6 +140,68 @@ class DatabaseReaderTaskTest extends TestCase
         $task->execute($state);
     }
 
+    public function testExecuteWithPaginationDoesNotLoseRows(): void
+    {
+        $state = $this->createStub(ProcessState::class);
+        $options = [
+            'table' => 'my_table',
+            'sql' => 'SELECT * FROM my_table',
+            'limit' => null,
+            'offset' => null,
+            'paginate' => 2,
+            'input_as_params' => false,
+            'params' => [],
+            'types' => [],
+            'empty_log_level' => LogLevel::WARNING,
+            'connection' => null,
+        ];
+
+        $resultData1 = ['id' => 1, 'name' => 'test1'];
+        $resultData2 = ['id' => 2, 'name' => 'test2'];
+        $resultData3 = ['id' => 3, 'name' => 'test3'];
+        $result = $this->createStub(Result::class);
+        $result->method('fetchAssociative')->willReturnOnConsecutiveCalls($resultData1, $resultData2, $resultData3, false, false);
+
+        $connection = $this->createStub(Connection::class);
+        $connection->method('executeQuery')->willReturn($result);
+
+        $task = new class($this->logger, $this->doctrine, $options, $connection) extends DatabaseReaderTask {
+            /**
+             * @param array<string, mixed> $testOptions
+             */
+            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions, private readonly Connection $testConnection)
+            {
+                parent::__construct($logger, $doctrine);
+            }
+
+            /**
+             * @return array<string, mixed>
+             */
+            protected function getOptions(?ProcessState $state = null): array
+            {
+                return $this->testOptions;
+            }
+
+            protected function getConnection(?ProcessState $state = null): Connection
+            {
+                return $this->testConnection;
+            }
+        };
+
+        $outputs = [];
+        $state->method('setOutput')->willReturnCallback(static function (mixed $output) use (&$outputs): void {
+            $outputs[] = $output;
+        });
+
+        $task->initialize($state);
+        $task->execute($state);
+        self::assertTrue($task->next($state));
+        $task->execute($state);
+        self::assertFalse($task->next($state));
+
+        self::assertSame([[$resultData1, $resultData2], [$resultData3]], $outputs);
+    }
+
     public function testFinalize(): void
     {
         $task = new DatabaseReaderTask($this->logger, $this->doctrine);

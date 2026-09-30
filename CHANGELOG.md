@@ -5,6 +5,9 @@ Latest
 * [#26](https://github.com/cleverage/doctrine-process-bundle/issues/26) Update quality stack: use Rector `withComposerBased()` sets (removed `SYMFONY_64` / `PHPUNIT_100` sets), declare used Symfony packages and PHPUnit range in composer.json, apply quality tools fixes
 * [#28](https://github.com/cleverage/doctrine-process-bundle/issues/28) Add missing documentations: complete reference pages for every Task (inherited options, iterable/flushable behaviours, examples, notes), Database to CSV export and CSV to entities import cookbooks. Harmonize index and task template, fix existing documentation.
 
+### Fixes
+* [#30](https://github.com/cleverage/doctrine-process-bundle/issues/30) DatabaseReaderTask no longer drops the row following each full page with the `paginate` option
+
 v3.0
 ------
 
