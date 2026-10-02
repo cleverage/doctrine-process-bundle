@@ -1,6 +1,9 @@
 Latest
 ------
 
+v3.2
+------
+
 ### Changes
 * [#38](https://github.com/cleverage/doctrine-process-bundle/issues/38) Add missing tests: DatabaseUpdaterTask on a SQLite database (options, params, connection), AbstractDoctrineQueryTask query builder (criteria, order, limit, offset), readers `next()` before execution, bundle and DI extension.
 
