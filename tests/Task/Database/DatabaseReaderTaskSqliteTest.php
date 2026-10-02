@@ -107,15 +107,33 @@ class DatabaseReaderTaskSqliteTest extends TestCase
         self::assertSame([['title' => 'It'], ['title' => 'Fahrenheit 451']], $this->iterate($task, $state, null));
     }
 
+    public function testNextBeforeExecute(): void
+    {
+        [$task, $state] = $this->createTask(['table' => 'book']);
+
+        self::assertFalse($task->next($state));
+    }
+
+    public function testConnectionOption(): void
+    {
+        $doctrine = $this->createMock(ManagerRegistry::class);
+        $doctrine->expects(self::once())->method('getConnection')->with('legacy')->willReturn($this->connection);
+        [$task, $state] = $this->createTask(['sql' => 'SELECT id FROM book WHERE id = 1', 'connection' => 'legacy'], $doctrine);
+
+        self::assertSame([['id' => 1]], $this->iterate($task, $state, null));
+    }
+
     /**
      * @param array<string, mixed> $options
      *
      * @return array{DatabaseReaderTask, ProcessState}
      */
-    private function createTask(array $options): array
+    private function createTask(array $options, ?ManagerRegistry $doctrine = null): array
     {
-        $doctrine = $this->createStub(ManagerRegistry::class);
-        $doctrine->method('getConnection')->willReturn($this->connection);
+        if (!$doctrine instanceof ManagerRegistry) {
+            $doctrine = $this->createStub(ManagerRegistry::class);
+            $doctrine->method('getConnection')->willReturn($this->connection);
+        }
 
         $processConfiguration = new ProcessConfiguration('test', []);
         $state = new ProcessState($processConfiguration, new ProcessHistory($processConfiguration));
