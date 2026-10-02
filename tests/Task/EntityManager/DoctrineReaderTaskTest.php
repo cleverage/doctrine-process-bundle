@@ -267,6 +267,15 @@ class DoctrineReaderTaskTest extends TestCase
         $task->execute($state);
     }
 
+    public function testNextBeforeExecute(): void
+    {
+        [$task, $state] = $this->createIteratingTask(static function (): \Generator {
+            yield (object) ['name' => 'entity1'];
+        });
+
+        self::assertFalse($task->next($state));
+    }
+
     public function testEntitiesAreHydratedWhileIterating(): void
     {
         $consumed = 0;

@@ -1,6 +1,9 @@
 Latest
 ------
 
+### Changes
+* [#38](https://github.com/cleverage/doctrine-process-bundle/issues/38) Add missing tests: DatabaseUpdaterTask on a SQLite database (options, params, connection), AbstractDoctrineQueryTask query builder (criteria, order, limit, offset), readers `next()` before execution, bundle and DI extension.
+
 ### Fixes
 * [#32](https://github.com/cleverage/doctrine-process-bundle/issues/32) Fix EntityManager tasks: use the entity manager given by the `entity_manager` option (it was ignored by every task except ClearEntityManagerTask), the one managing the entity class otherwise. Update documentation, add tests.
 * [#33](https://github.com/cleverage/doctrine-process-bundle/issues/33) Fix DatabaseReaderTask and DoctrineReaderTask: execute the query again for each input (the input following a complete iteration was skipped). Update documentation, add tests.
