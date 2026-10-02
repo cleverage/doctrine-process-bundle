@@ -1,6 +1,13 @@
 Latest
 ------
 
+### Fixes
+* [#32](https://github.com/cleverage/doctrine-process-bundle/issues/32) Fix EntityManager tasks: use the entity manager given by the `entity_manager` option (it was ignored by every task except ClearEntityManagerTask), the one managing the entity class otherwise. Update documentation, add tests.
+* [#33](https://github.com/cleverage/doctrine-process-bundle/issues/33) Fix DatabaseReaderTask and DoctrineReaderTask: execute the query again for each input (the input following a complete iteration was skipped). Update documentation, add tests.
+* [#34](https://github.com/cleverage/doctrine-process-bundle/issues/34) Fix DatabaseReaderTask: the `table` option is only required when `sql` is not set. Update documentation, add tests.
+* [#35](https://github.com/cleverage/doctrine-process-bundle/issues/35) Fix DoctrineDetacherTask error message on a null input (it named DoctrineWriterTask), and throw an explicit `\RuntimeException` on a null input in DoctrineRemoverTask (a `\TypeError` was triggered). Update documentation, add tests.
+* [#36](https://github.com/cleverage/doctrine-process-bundle/issues/36) Fix DoctrineReaderTask: hydrate the entities one at a time while iterating (every entity was hydrated before the first output). Update documentation, add tests.
+
 v3.1
 ------
 

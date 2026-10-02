@@ -25,6 +25,8 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
+use Symfony\Component\OptionsResolver\Options as ResolvedOptions;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -32,7 +34,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @phpstan-type Options array{
  *      'sql': ?string,
- *      'table': string,
+ *      'table': ?string,
  *      'limit': ?int,
  *      'empty_log_level': string,
  *      'paginate': ?int,
@@ -66,8 +68,16 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         }
 
         $this->nextItem = $this->statement->fetchAssociative();
+        if (false !== $this->nextItem) {
+            return true;
+        }
 
-        return (bool) $this->nextItem;
+        // End of the iteration: the next input executes the query again
+        $this->statement->free();
+        $this->statement = null;
+        $this->nextItem = null;
+
+        return false;
     }
 
     public function execute(ProcessState $state): void
@@ -124,9 +134,11 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
         if (null === $sql) {
             $qb = $connection->createQueryBuilder();
+            /** @var string $table Required without sql */
+            $table = $options['table'];
             $qb
                 ->select('tbl.*')
-                ->from($options['table'], 'tbl');
+                ->from($table, 'tbl');
 
             if ($options['limit']) {
                 $qb->setMaxResults($options['limit']);
@@ -150,10 +162,9 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
 
     protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setRequired(['table']);
-        $resolver->setAllowedTypes('table', ['string']);
         $resolver->setDefaults(
             [
+                'table' => null,
                 'connection' => null,
                 'sql' => null,
                 'limit' => null,
@@ -165,6 +176,15 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
                 'empty_log_level' => LogLevel::WARNING,
             ]
         );
+        $resolver->setAllowedTypes('table', ['null', 'string']);
+        // Only used to build the query when sql is not given
+        $resolver->setNormalizer('table', static function (ResolvedOptions $options, ?string $table): ?string {
+            if (null === $table && null === $options['sql']) {
+                throw new MissingOptionsException('The option "table" is required when the option "sql" is not set.');
+            }
+
+            return $table;
+        });
         $resolver->setAllowedTypes('connection', ['null', 'string']);
         $resolver->setAllowedTypes('sql', ['null', 'string']);
         $resolver->setAllowedTypes('paginate', ['null', 'int']);

@@ -59,6 +59,7 @@ class DoctrineDetacherTaskTest extends TestCase
     public function testExecuteThrowsExceptionOnNullInput(): void
     {
         $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('DoctrineDetacherTask does not allow null input');
 
         $state = $this->createStub(ProcessState::class);
         $state->method('getInput')->willReturn(null);

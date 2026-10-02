@@ -27,6 +27,7 @@ class DoctrineRemoverTaskTest extends TestCase
     {
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn($entity);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -42,9 +43,11 @@ class DoctrineRemoverTaskTest extends TestCase
 
     public function testExecuteWithNullInput(): void
     {
-        $this->expectException(\TypeError::class); // ClassUtils::getClass expects an object, null will cause a TypeError
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('DoctrineRemoverTask does not allow null input');
 
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn(null);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);
@@ -59,6 +62,7 @@ class DoctrineRemoverTaskTest extends TestCase
 
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn($entity);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);

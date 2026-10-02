@@ -27,6 +27,7 @@ class DoctrineCleanerTaskTest extends TestCase
     {
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn($entity);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -44,6 +45,7 @@ class DoctrineCleanerTaskTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn(null);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);
@@ -58,6 +60,7 @@ class DoctrineCleanerTaskTest extends TestCase
 
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn($entity);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);

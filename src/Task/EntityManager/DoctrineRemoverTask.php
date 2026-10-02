@@ -15,7 +15,6 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Remove Doctrine entities.
@@ -25,12 +24,12 @@ class DoctrineRemoverTask extends AbstractDoctrineTask
     public function execute(ProcessState $state): void
     {
         $entity = $state->getInput();
+        if (null === $entity) {
+            throw new \RuntimeException('DoctrineRemoverTask does not allow null input');
+        }
         /** @var object $entity */
         $class = ClassUtils::getClass($entity);
-        $entityManager = $this->doctrine->getManagerForClass($class);
-        if (!$entityManager instanceof EntityManagerInterface) {
-            throw new \UnexpectedValueException("No manager found for class {$class}");
-        }
+        $entityManager = $this->getEntityManager($state, $class);
         $entityManager->remove($entity);
         $entityManager->flush();
     }

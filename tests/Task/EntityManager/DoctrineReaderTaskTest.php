@@ -14,6 +14,10 @@ declare(strict_types=1);
 namespace CleverAge\DoctrineProcessBundle\Tests\Task\EntityManager;
 
 use CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask;
+use CleverAge\ProcessBundle\Configuration\ProcessConfiguration;
+use CleverAge\ProcessBundle\Configuration\TaskConfiguration;
+use CleverAge\ProcessBundle\Context\ContextualOptionResolver;
+use CleverAge\ProcessBundle\Model\ProcessHistory;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
@@ -24,6 +28,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 #[CoversClass(DoctrineReaderTask::class)]
 class DoctrineReaderTaskTest extends TestCase
@@ -40,6 +45,7 @@ class DoctrineReaderTaskTest extends TestCase
             'limit' => 10,
             'offset' => 0,
             'empty_log_level' => LogLevel::WARNING,
+            'entity_manager' => null,
         ];
 
         $entity = new \stdClass();
@@ -101,6 +107,7 @@ class DoctrineReaderTaskTest extends TestCase
             'limit' => null,
             'offset' => null,
             'empty_log_level' => LogLevel::WARNING,
+            'entity_manager' => null,
         ];
 
         $query = $this->createStub(Query::class);
@@ -158,6 +165,7 @@ class DoctrineReaderTaskTest extends TestCase
             'limit' => null,
             'offset' => null,
             'empty_log_level' => LogLevel::WARNING,
+            'entity_manager' => null,
         ];
 
         $entity1 = new \stdClass();
@@ -232,6 +240,7 @@ class DoctrineReaderTaskTest extends TestCase
             'limit' => null,
             'offset' => null,
             'empty_log_level' => LogLevel::WARNING,
+            'entity_manager' => null,
         ];
 
         $doctrine->method('getManagerForClass')->willReturn(null);
@@ -256,5 +265,82 @@ class DoctrineReaderTaskTest extends TestCase
 
         $task->initialize($state);
         $task->execute($state);
+    }
+
+    public function testEntitiesAreHydratedWhileIterating(): void
+    {
+        $consumed = 0;
+        [$task, $state] = $this->createIteratingTask(static function () use (&$consumed): \Generator {
+            foreach (['entity1', 'entity2', 'entity3'] as $entity) {
+                ++$consumed;
+                yield (object) ['name' => $entity];
+            }
+        });
+
+        $task->execute($state);
+
+        // Only the first entity has been fetched from the query
+        self::assertSame(1, $consumed);
+        self::assertTrue($task->next($state));
+        self::assertSame(2, $consumed);
+    }
+
+    public function testEachInputExecutesTheQueryAgain(): void
+    {
+        $queries = 0;
+        [$task, $state] = $this->createIteratingTask(static function () use (&$queries): \Generator {
+            ++$queries;
+            yield (object) ['name' => 'entity1'];
+            yield (object) ['name' => 'entity2'];
+        });
+
+        foreach (['first', 'second', 'third'] as $input) {
+            $names = [];
+            do {
+                $state->reset(false);
+                $task->execute($state);
+                self::assertFalse($state->isSkipped(), "Input {$input} skipped");
+                /** @var object{name: string} $output */
+                $output = $state->getOutput();
+                $names[] = $output->name;
+            } while ($task->next($state));
+
+            self::assertSame(['entity1', 'entity2'], $names);
+        }
+        self::assertSame(3, $queries);
+    }
+
+    /**
+     * @param \Closure(): \Generator $results
+     *
+     * @return array{DoctrineReaderTask, ProcessState}
+     */
+    private function createIteratingTask(\Closure $results): array
+    {
+        $query = $this->createStub(Query::class);
+        $query->method('toIterable')->willReturnCallback($results);
+
+        $qb = $this->createStub(QueryBuilder::class);
+        $qb->method('getQuery')->willReturn($query);
+
+        $repository = $this->createStub(EntityRepository::class);
+        $repository->method('createQueryBuilder')->willReturn($qb);
+
+        $em = $this->createStub(EntityManagerInterface::class);
+        $em->method('getRepository')->willReturn($repository);
+
+        $doctrine = $this->createStub(ManagerRegistry::class);
+        $doctrine->method('getManagerForClass')->willReturn($em);
+
+        $processConfiguration = new ProcessConfiguration('test', []);
+        $state = new ProcessState($processConfiguration, new ProcessHistory($processConfiguration));
+        $state->setContextualOptionResolver(new ContextualOptionResolver());
+        $state->setContext([]);
+        $state->setTaskConfiguration(new TaskConfiguration('read', DoctrineReaderTask::class, ['class_name' => 'App\\Entity\\MyEntity']));
+
+        $task = new DoctrineReaderTask(new NullLogger(), $doctrine);
+        $task->initialize($state);
+
+        return [$task, $state];
     }
 }

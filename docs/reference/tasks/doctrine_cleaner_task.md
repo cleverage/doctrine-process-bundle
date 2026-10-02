@@ -3,7 +3,7 @@ DoctrineCleanerTask
 
 Clears the entity manager that manages the class of the entity received as input: **all** the entities of this
 entity manager are detached (not only the input entity). Useful when the entity manager is not the default one, as it
-is guessed from the input.
+is guessed from the input (unless the `entity_manager` option is set).
 
 Task reference
 --------------
@@ -24,9 +24,9 @@ No output is set.
 Options
 -------
 
-| Code             | Type           | Required | Default | Description                                                                                                  |
-|------------------|----------------|:--------:|---------|--------------------------------------------------------------------------------------------------------------|
-| `entity_manager` | `string\|null` |          | `null`  | Inherited from the base Doctrine task but not used: the entity manager is the one managing the input's class |
+| Code             | Type           | Required | Default | Description                                                                                                                      |
+|------------------|----------------|:--------:|---------|----------------------------------------------------------------------------------------------------------------------------------|
+| `entity_manager` | `string\|null` |          | `null`  | Name of the entity manager (as defined in `doctrine.orm.entity_managers`). If `null`, the one managing the input's class is used |
 
 Examples
 --------

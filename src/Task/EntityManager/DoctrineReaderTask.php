@@ -15,7 +15,6 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
 use CleverAge\ProcessBundle\Model\ProcessState;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Psr\Log\LoggerInterface;
@@ -47,8 +46,14 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             return false;
         }
         $this->iterator->next();
+        if ($this->iterator->valid()) {
+            return true;
+        }
 
-        return $this->iterator->valid();
+        // End of the iteration: the next input executes the query again
+        $this->iterator = null;
+
+        return false;
     }
 
     public function execute(ProcessState $state): void
@@ -58,10 +63,7 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
         if (!$this->iterator instanceof \Iterator) {
             /** @var class-string $class */
             $class = $options['class_name'];
-            $entityManager = $this->doctrine->getManagerForClass($class);
-            if (!$entityManager instanceof EntityManagerInterface) {
-                throw new \UnexpectedValueException("No manager found for class {$class}");
-            }
+            $entityManager = $this->getEntityManager($state, $class);
             $repository = $entityManager->getRepository($class);
             $this->initIterator($repository, $options);
         }
@@ -100,7 +102,9 @@ class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTa
             $options['offset']
         );
 
-        $this->iterator = new \ArrayIterator(iterator_to_array($qb->getQuery()->toIterable()));
+        // Keep the iterator, so the entities are hydrated one at a time while the process iterates
+        $iterable = $qb->getQuery()->toIterable();
+        $this->iterator = \is_array($iterable) ? new \ArrayIterator($iterable) : new \IteratorIterator($iterable);
         $this->iterator->rewind();
     }
 }

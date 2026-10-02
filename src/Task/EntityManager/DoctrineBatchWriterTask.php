@@ -68,10 +68,7 @@ class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableT
         $entityManagers = new \SplObjectStorage();
         foreach ($this->batch as $entity) {
             $class = ClassUtils::getClass($entity);
-            $entityManager = $this->doctrine->getManagerForClass($class);
-            if (!$entityManager instanceof EntityManagerInterface) {
-                throw new \UnexpectedValueException("No manager found for class {$class}");
-            }
+            $entityManager = $this->getEntityManager($state, $class);
             $entityManager->persist($entity);
             $entityManagers->offsetSet($entityManager);
         }

@@ -26,10 +26,10 @@ input is only buffered, and on flush if there is no remaining entity.
 Options
 -------
 
-| Code             | Type           | Required | Default | Description                                                                                                  |
-|------------------|----------------|:--------:|---------|--------------------------------------------------------------------------------------------------------------|
-| `batch_count`    | `int`          |          | `10`    | Number of entities to buffer before writing them to the database                                             |
-| `entity_manager` | `string\|null` |          | `null`  | Inherited from the base Doctrine task but not used: the entity manager is the one managing each entity class |
+| Code             | Type           | Required | Default | Description                                                                                                                             |
+|------------------|----------------|:--------:|---------|-----------------------------------------------------------------------------------------------------------------------------------------|
+| `batch_count`    | `int`          |          | `10`    | Number of entities to buffer before writing them to the database                                                                        |
+| `entity_manager` | `string\|null` |          | `null`  | Name of the entity manager (as defined in `doctrine.orm.entity_managers`). If `null`, the one managing the class of each entity is used |
 
 Examples
 --------
