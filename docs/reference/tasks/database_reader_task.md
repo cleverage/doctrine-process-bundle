@@ -30,7 +30,7 @@ Options
 
 | Code              | Type          | Required | Default   | Description                                                                                                                                                                                                                        |
 |-------------------|---------------|:--------:|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `table`           | `string`      |  **X**   |           | Table to read from when `sql` is not set: the query is `SELECT tbl.* FROM <table> tbl`.<br/>Required even when `sql` is set (its value is then ignored)                                                                            |
+| `table`           | `string`      |          |           | Table to read from: the query is `SELECT tbl.* FROM <table> tbl`.<br/>Required when `sql` is not set (ignored otherwise)                                                                                                           |
 | `connection`      | `string\|null` |          | `null`    | Name of the Doctrine DBAL connection (as defined in `doctrine.dbal.connections`). If `null`, the default connection is used                                                                                                        |
 | `sql`             | `string\|null` |          | `null`    | Custom SQL query to execute, with optional named (`:name`) or positional (`?`) parameters                                                                                                                                          |
 | `limit`           | `int\|null`    |          | `null`    | Maximum number of rows. Only used when `sql` is not set                                                                                                                                                                            |
@@ -66,7 +66,6 @@ read_books:
 read_books:
   service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
   options:
-    table: 'book' # Required but not used
     sql: >
       SELECT b.id, b.title, a.lastname AS author
       FROM book b INNER JOIN author a ON a.id = b.author_id
@@ -89,7 +88,6 @@ get_params:
 read_books:
   service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
   options:
-    table: 'book'
     sql: 'SELECT * FROM book WHERE id >= :min_id'
     input_as_params: true
     types:
@@ -108,5 +106,5 @@ Notes
   process is finalized.
 * Array parameters (e.g. for an `IN (:ids)` clause) require an `ArrayParameterType` in `types`, for instance
   `ids: !php/enum Doctrine\DBAL\ArrayParameterType::INTEGER` with Doctrine DBAL 4.
-* The task is designed to be executed once per process run (typically as the entry point): if it receives a new input
-  after having iterated over all the rows, that input only resets the task, which is skipped.
+* The query is executed again for each input received by the task (e.g. after an iterable task): with
+  `input_as_params`, each input gives its own parameters.

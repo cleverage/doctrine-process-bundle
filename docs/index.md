@@ -45,10 +45,10 @@ doctrine:
   [DatabaseUpdaterTask](reference/tasks/database_updater_task.md)) run raw SQL queries through Doctrine DBAL. Their
   `connection` option takes the name of a connection (a key under `doctrine.dbal.connections`); the default connection
   is used if it is not set.
-* **EntityManager** tasks work with Doctrine ORM entities. Except for the
-  [ClearEntityManagerTask](reference/tasks/doctrine_clear_task.md), which takes the name of an entity manager (a key
-  under `doctrine.orm.entity_managers`) in its `entity_manager` option, they use the entity manager that manages the
-  class of the handled entity.
+* **EntityManager** tasks work with Doctrine ORM entities. Their `entity_manager` option takes the name of an entity
+  manager (a key under `doctrine.orm.entity_managers`); if it is not set, they use the entity manager that manages the
+  class of the handled entity (the default entity manager for the
+  [ClearEntityManagerTask](reference/tasks/doctrine_clear_task.md)).
 
 See the [DoctrineBundle documentation](https://symfony.com/bundles/DoctrineBundle/current/configuration.html) for the
 configuration of multiple connections and entity managers.

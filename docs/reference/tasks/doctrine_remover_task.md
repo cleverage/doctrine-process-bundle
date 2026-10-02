@@ -11,8 +11,8 @@ Task reference
 Accepted inputs
 ---------------
 
-`object`: a Doctrine managed entity. An object whose class is not managed by any entity manager throws an
-`\UnexpectedValueException`.
+`object`: a Doctrine managed entity. A `null` input throws a `\RuntimeException`, and an object whose class is not
+managed by any entity manager throws an `\UnexpectedValueException`.
 
 Possible outputs
 ----------------
@@ -22,9 +22,9 @@ No output is set.
 Options
 -------
 
-| Code             | Type           | Required | Default | Description                                                                                                  |
-|------------------|----------------|:--------:|---------|--------------------------------------------------------------------------------------------------------------|
-| `entity_manager` | `string\|null` |          | `null`  | Inherited from the base Doctrine task but not used: the entity manager is the one managing the input's class |
+| Code             | Type           | Required | Default | Description                                                                                                                      |
+|------------------|----------------|:--------:|---------|----------------------------------------------------------------------------------------------------------------------------------|
+| `entity_manager` | `string\|null` |          | `null`  | Name of the entity manager (as defined in `doctrine.orm.entity_managers`). If `null`, the one managing the input's class is used |
 
 Examples
 --------
@@ -50,4 +50,3 @@ Notes
 * `flush()` writes **all** the pending changes of the entity manager, not only the removal.
 * Cascade and `orphanRemoval` rules of the entity mapping apply. To delete many rows at once, a single `DELETE`
   statement with the [DatabaseUpdaterTask](database_updater_task.md) is much faster.
-* A `null` input is not supported (it throws a `\TypeError`).

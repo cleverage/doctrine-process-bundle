@@ -44,6 +44,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
     {
         $entity1 = new \stdClass();
         $state = $this->createMock(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturn($entity1);
 
         $task = $this->getTask(['batch_count' => 2]);
@@ -63,6 +64,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
         $entity2 = new \stdClass();
 
         $state = $this->createMock(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->method('getInput')->willReturnOnConsecutiveCalls($entity1, $entity2);
         $state->expects($this->once())->method('setOutput')->with([$entity1, $entity2]);
 
@@ -91,6 +93,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
     public function testFlushCallsWriteBatch(): void
     {
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $task = $this->getMockBuilder(DoctrineBatchWriterTask::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['writeBatch'])
@@ -103,6 +106,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
     public function testWriteBatchWithEmptyBatchSkipsState(): void
     {
         $state = $this->createMock(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->expects($this->once())->method('setSkipped')->with(true);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);
@@ -123,6 +127,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
         $entity1 = new \stdClass();
         $entity2 = new \stdClass();
         $state = $this->createMock(ProcessState::class); // Use mock to set expectation on setSkipped
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->expects($this->never())->method('setSkipped'); // Should not be skipped if batch is not empty
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -148,6 +153,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
     {
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
 
         $entityManager = $this->createStub(EntityManagerInterface::class);
         $managerRegistry = $this->createStub(ManagerRegistry::class);
@@ -170,6 +176,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
     {
         $entity = new \stdClass();
         $state = $this->createMock(ProcessState::class); // Use mock to set expectation on setOutput
+        $state->method('getContextualizedOptions')->willReturn([]);
         $state->expects($this->once())->method('setOutput')->with([$entity]);
 
         $entityManager = $this->createStub(EntityManagerInterface::class);
@@ -193,6 +200,7 @@ class DoctrineBatchWriterTaskTest extends TestCase
 
         $entity = new \stdClass();
         $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
 
         $managerRegistry = $this->createStub(ManagerRegistry::class);
         $managerRegistry->method('getManagerForClass')->willReturn(null); // Simulate no manager found

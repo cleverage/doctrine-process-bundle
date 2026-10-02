@@ -15,7 +15,6 @@ namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Persists and flush Doctrine entities.
@@ -37,10 +36,7 @@ class DoctrineWriterTask extends AbstractDoctrineTask
             throw new \RuntimeException('DoctrineWriterTask does not allow null input');
         }
         $class = ClassUtils::getClass($entity);
-        $entityManager = $this->doctrine->getManagerForClass($class);
-        if (!$entityManager instanceof EntityManagerInterface) {
-            throw new \UnexpectedValueException("No manager found for class {$class}");
-        }
+        $entityManager = $this->getEntityManager($state, $class);
         $entityManager->persist($entity);
 
         $entityManager->flush();

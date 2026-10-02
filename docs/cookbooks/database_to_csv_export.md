@@ -14,7 +14,6 @@ clever_age_process:
                 read_books:
                     service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
                     options:
-                        table: 'book' # Required, even if a custom sql query is used
                         sql: >
                             SELECT b.id, b.title, a.firstname, a.lastname
                             FROM book b
@@ -78,5 +77,5 @@ How it works:
 
 To export entities instead of raw rows, replace the first task by a
 [DoctrineReaderTask](../reference/tasks/doctrine_reader_task.md) and read the values with property paths
-(e.g. `code: 'author.lastname'`). Note that the DoctrineReaderTask loads all the matching entities in memory: for
-big volumes, prefer the DatabaseReaderTask.
+(e.g. `code: 'author.lastname'`). Note that the hydrated entities stay managed by the entity manager: for big
+volumes, clear it regularly or prefer the DatabaseReaderTask.

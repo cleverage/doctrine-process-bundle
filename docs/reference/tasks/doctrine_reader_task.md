@@ -33,7 +33,7 @@ Options
 | `limit`           | `int\|null`    |          | `null`    | Maximum number of entities                                                                                                                                                                                   |
 | `offset`          | `int\|null`    |          | `null`    | Index of the first entity                                                                                                                                                                                    |
 | `empty_log_level` | `string`      |          | `warning` | PSR log level (`Psr\Log\LogLevel` values) used to log an empty result set                                                                                                                                    |
-| `entity_manager`  | `string\|null` |          | `null`    | Inherited from the base Doctrine task but not used: the entity manager is the one managing `class_name`                                                                                                      |
+| `entity_manager`  | `string\|null` |          | `null`    | Name of the entity manager (as defined in `doctrine.orm.entity_managers`). If `null`, the one managing the `class_name` is used                                                                              |
 
 Examples
 --------
@@ -74,13 +74,14 @@ read_books:
 Notes
 -----
 
-* The query is executed on the first execution of the task and **all** the matching entities are loaded in memory
-  before being output one by one. For big volumes, use `limit`/`offset`, clear the entity manager downstream (see
-  [ClearEntityManagerTask](doctrine_clear_task.md)) or read raw rows with the
+* The query is executed on the first execution of the task, then the entities are hydrated one at a time while the
+  process iterates (`Query::toIterable()`). They stay managed by the entity manager: for big volumes, clear it
+  downstream (see [ClearEntityManagerTask](doctrine_clear_task.md)) or detach the entities (see
+  [DoctrineDetacherTask](doctrine_detacher_task.md)) to keep the memory usage low, or read raw rows with the
   [DatabaseReaderTask](database_reader_task.md).
 * Entities stay managed by the entity manager: they can be modified then saved with the
   [DoctrineWriterTask](doctrine_writer_task.md).
-* The task is designed to be executed once per process run (typically as the entry point): if it receives a new input
-  after having iterated over all the entities, that input only resets the task, which is skipped.
+* The query is executed again for each input received by the task (e.g. after an iterable task); the input itself
+  is not used.
 * For more complex queries, extend `CleverAge\DoctrineProcessBundle\Task\EntityManager\AbstractDoctrineQueryTask`
   (which provides the options above and a `getQueryBuilder()` method) or this task.
