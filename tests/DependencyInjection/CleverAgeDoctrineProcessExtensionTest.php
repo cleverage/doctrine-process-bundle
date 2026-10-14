@@ -28,6 +28,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 
 #[CoversClass(CleverAgeDoctrineProcessExtension::class)]
 class CleverAgeDoctrineProcessExtensionTest extends TestCase
@@ -69,6 +70,33 @@ class CleverAgeDoctrineProcessExtensionTest extends TestCase
         $alias = $container->getAlias($class);
         self::assertSame($id, (string) $alias);
         self::assertTrue($alias->isPublic());
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function provideLoggedTasks(): iterable
+    {
+        yield 'database_reader' => ['cleverage_doctrine_process.task.database_reader'];
+        yield 'database_updater' => ['cleverage_doctrine_process.task.database_updater'];
+        yield 'doctrine_reader' => ['cleverage_doctrine_process.task.doctrine_reader'];
+    }
+
+    #[DataProvider('provideLoggedTasks')]
+    public function testLoggerIsInjected(string $id): void
+    {
+        $container = new ContainerBuilder();
+        (new CleverAgeDoctrineProcessExtension())->load([], $container);
+
+        $references = [];
+        foreach ($container->getDefinition($id)->getArguments() as $argument) {
+            if ($argument instanceof Reference) {
+                $references[] = (string) $argument;
+            }
+        }
+        // The "channel" of the "monolog.logger" tag only applies to a reference to the "logger" service
+        self::assertContains('logger', $references);
+        self::assertNotContains('monolog.logger', $references);
     }
 
     public function testEveryTaskIsTested(): void

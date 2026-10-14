@@ -8,7 +8,7 @@ services:
         class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask
         shared: false
         arguments:
-            - '@monolog.logger'
+            - '@logger'
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask:
         alias: cleverage_doctrine_process.task.database_reader
@@ -19,7 +19,7 @@ services:
         shared: false
         arguments:
             - '@doctrine'
-            - '@monolog.logger'
+            - '@logger'
     CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask:
         alias: cleverage_doctrine_process.task.database_updater
         public: true
@@ -64,7 +64,7 @@ services:
         class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask
         shared: false
         arguments:
-            - '@monolog.logger'
+            - '@logger'
             - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask:
         alias: cleverage_doctrine_process.task.doctrine_reader
