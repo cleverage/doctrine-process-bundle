@@ -2,6 +2,7 @@ Latest
 ------
 
 ### Changes
+* [#46](https://github.com/cleverage/doctrine-process-bundle/issues/46) Add a `.gitattributes`: the development files (`.docker/`, `.github/`, `tests/`, quality tools and PHPUnit configurations, `Makefile`) are no longer part of the archive installed by Composer (`dist`).
 * [#43](https://github.com/cleverage/doctrine-process-bundle/issues/43) Clean up composer.json: `doctrine/doctrine-migrations-bundle`, not used by the bundle, is now only suggested (applications relying on the bundle to install it must require it, as `symfony/orm-pack` does); require `doctrine/dbal`, `doctrine/persistence` and `psr/log`, used directly.
 
 ### Fixes
