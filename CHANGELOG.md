@@ -1,6 +1,9 @@
 Latest
 ------
 
+### Changes
+* [#43](https://github.com/cleverage/doctrine-process-bundle/issues/43) Clean up composer.json: `doctrine/doctrine-migrations-bundle`, not used by the bundle, is now only suggested (applications relying on the bundle to install it must require it, as `symfony/orm-pack` does); require `doctrine/dbal`, `doctrine/persistence` and `psr/log`, used directly.
+
 ### Fixes
 * [#42](https://github.com/cleverage/doctrine-process-bundle/issues/42) Fix DatabaseReaderTask, DatabaseUpdaterTask and DoctrineReaderTask: inject the `logger` service instead of `monolog.logger`, so that they log on the `cleverage_process_task` channel of their `monolog.logger` tag (they logged on the `app` channel, without the process context, and their logs were missing from the process execution logs of the UI). Add tests.
 

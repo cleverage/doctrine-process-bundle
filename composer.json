@@ -52,9 +52,11 @@
         "php": ">=8.2",
         "cleverage/process-bundle": "^5.0",
         "doctrine/common": "^3.5",
+        "doctrine/dbal": "^3.7 || ^4",
         "doctrine/doctrine-bundle": "^2.18 || ^3.1",
-        "doctrine/doctrine-migrations-bundle": "^3.7 || ^4",
         "doctrine/orm": "^2.20 || ^3.5",
+        "doctrine/persistence": "^3.1 || ^4",
+        "psr/log": "^1.1.4 || ^2 || ^3",
         "symfony/config": "^6.4 || ^7.4 || ^8",
         "symfony/dependency-injection": "^6.4 || ^7.4 || ^8",
         "symfony/finder": "^6.4 || ^7.4 || ^8",
@@ -71,6 +73,9 @@
         "rector/rector": "*",
         "roave/security-advisories": "dev-latest",
         "symfony/test-pack": "^1.1"
+    },
+    "suggest": {
+        "doctrine/doctrine-migrations-bundle": "To version the database schema of the entities read and written by the processes"
     },
     "config": {
       "allow-plugins": {
