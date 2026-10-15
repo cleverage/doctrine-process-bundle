@@ -8,6 +8,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask`
+* **Code**: `doctrine_writer` (`task: doctrine_writer`)
 
 Accepted inputs
 ---------------
@@ -35,19 +36,19 @@ Examples
 ```yaml
 # Task configuration level
 entry:
-  service: '@CleverAge\ProcessBundle\Task\ConstantOutputTask'
+  task: constant_output
   options:
     output:
       firstname: Isaac
       lastname: Asimov
   outputs: [denormalize]
 denormalize:
-  service: '@CleverAge\ProcessBundle\Task\Serialization\DenormalizerTask'
+  task: denormalizer
   options:
     class: App\Entity\Author
   outputs: [save]
 save:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask'
+  task: doctrine_writer
   outputs: [next_task]
 ```
 

@@ -53,6 +53,17 @@ doctrine:
 See the [DoctrineBundle documentation](https://symfony.com/bundles/DoctrineBundle/current/configuration.html) for the
 configuration of multiple connections and entity managers.
 
+Its tasks are registered as services (non-shared) and are used in your processes by their code, prefixed by
+`doctrine_` (e.g. `task: doctrine_reader`, requires `cleverage/process-bundle` 5.4 or later, see its
+[task definition](https://github.com/cleverage/process-bundle/blob/main/docs/reference/02-task_definition.md)); the
+code of each task is given on its reference page. Referencing them by their class name
+(`service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'`) is deprecated since
+`cleverage/process-bundle` 5.4.
+
+Their service id is their class name. Fetching them directly from the service container is deprecated since 3.3 (they
+will be private in 4.0); their former ids, `cleverage_doctrine_process.task.*` (e.g.
+`cleverage_doctrine_process.task.doctrine_reader`), are deprecated aliases since 3.3, removed in 4.0.
+
 ## Documentation
 
 - Cookbooks

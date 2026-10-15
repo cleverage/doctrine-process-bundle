@@ -1,98 +1,150 @@
 services:
     _defaults:
-        public: false
+        # Public for the direct access from the service container, deprecated since 3.3: private in 4.0
+        public: true
         tags:
             - { name: monolog.logger, channel: cleverage_process_task }
+            - { name: container.private, package: cleverage/doctrine-process-bundle, version: '3.3' }
 
-    cleverage_doctrine_process.task.database_reader:
-        class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask
-        shared: false
-        arguments:
-            - '@logger'
-            - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask:
-        alias: cleverage_doctrine_process.task.database_reader
-        public: true
-
-    cleverage_doctrine_process.task.database_updater:
-        class: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask
         shared: false
         arguments:
-            - '@doctrine'
             - '@logger'
+            - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_database_reader }
+    cleverage_doctrine_process.task.database_reader:
+        alias: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_database_reader" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask:
-        alias: cleverage_doctrine_process.task.database_updater
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_clear_entity_manager:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask
         shared: false
         arguments:
             - '@doctrine'
+            - '@logger'
+        tags:
+            - { name: cleverage.task, code: doctrine_database_updater }
+    cleverage_doctrine_process.task.database_updater:
+        alias: CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_database_updater" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask:
-        alias: cleverage_doctrine_process.task.doctrine_clear_entity_manager
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_batch_writer:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask
         shared: false
         arguments:
             - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_clear_entity_manager }
+    cleverage_doctrine_process.task.doctrine_clear_entity_manager:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_clear_entity_manager" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask:
-        alias: cleverage_doctrine_process.task.doctrine_batch_writer
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_cleaner:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask
         shared: false
         arguments:
             - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_batch_writer }
+    cleverage_doctrine_process.task.doctrine_batch_writer:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_batch_writer" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask:
-        alias: cleverage_doctrine_process.task.doctrine_cleaner
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_detacher:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask
         shared: false
         arguments:
             - '@doctrine'
-    CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask:
-        alias: cleverage_doctrine_process.task.doctrine_detacher
-        public: true
+        tags:
+            - { name: cleverage.task, code: doctrine_cleaner }
+    cleverage_doctrine_process.task.doctrine_cleaner:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_cleaner" task code or the class name of the task instead. It will be removed in 4.0.'
 
-    cleverage_doctrine_process.task.doctrine_reader:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask
+    CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask:
+        shared: false
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_detacher }
+    cleverage_doctrine_process.task.doctrine_detacher:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_detacher" task code or the class name of the task instead. It will be removed in 4.0.'
+
+    CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask:
         shared: false
         arguments:
             - '@logger'
             - '@doctrine'
-    CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask:
-        alias: cleverage_doctrine_process.task.doctrine_reader
-        public: true
+        tags:
+            - { name: cleverage.task, code: doctrine_reader }
+    cleverage_doctrine_process.task.doctrine_reader:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_reader" task code or the class name of the task instead. It will be removed in 4.0.'
 
-    cleverage_doctrine_process.task.doctrine_refresher:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask
-        shared: false
-        arguments:
-            - '@doctrine'
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask:
-        alias: cleverage_doctrine_process.task.doctrine_refresher
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_remover:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask
         shared: false
         arguments:
             - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_refresher }
+    cleverage_doctrine_process.task.doctrine_refresher:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_refresher" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask:
-        alias: cleverage_doctrine_process.task.doctrine_remover
-        public: true
-
-    cleverage_doctrine_process.task.doctrine_writer:
-        class: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask
         shared: false
         arguments:
             - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_remover }
+    cleverage_doctrine_process.task.doctrine_remover:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_remover" task code or the class name of the task instead. It will be removed in 4.0.'
+
     CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask:
-        alias: cleverage_doctrine_process.task.doctrine_writer
-        public: true
+        shared: false
+        arguments:
+            - '@doctrine'
+        tags:
+            - { name: cleverage.task, code: doctrine_writer }
+    cleverage_doctrine_process.task.doctrine_writer:
+        alias: CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineWriterTask
+        public: false
+        deprecated:
+            package: cleverage/doctrine-process-bundle
+            version: '3.3'
+            message: 'The "%alias_id%" service alias is deprecated, use the "doctrine_writer" task code or the class name of the task instead. It will be removed in 4.0.'

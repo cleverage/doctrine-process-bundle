@@ -12,7 +12,7 @@ clever_age_process:
             help: "bin/console cleverage:process:execute app.database_to_csv_export -c lastname:\"'King'\""
             tasks:
                 read_books:
-                    service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
+                    task: doctrine_database_reader
                     options:
                         sql: >
                             SELECT b.id, b.title, a.firstname, a.lastname
@@ -26,7 +26,7 @@ clever_age_process:
                     outputs: [format]
 
                 format:
-                    service: '@CleverAge\ProcessBundle\Task\TransformerTask'
+                    task: transformer
                     options:
                         transformers:
                             mapping:
@@ -43,17 +43,17 @@ clever_age_process:
                     outputs: [write_csv, count_rows]
 
                 count_rows:
-                    service: '@CleverAge\ProcessBundle\Task\Reporting\StatCounterTask'
+                    task: stat_counter
 
                 write_csv:
-                    service: '@CleverAge\ProcessBundle\Task\File\Csv\CsvWriterTask'
+                    task: csv_writer
                     options:
                         file_path: '%kernel.project_dir%/var/exports/books_{date_time}.csv'
                         headers: [id, title, author]
                     outputs: [log_file]
 
                 log_file:
-                    service: '@CleverAge\ProcessBundle\Task\Reporting\LoggerTask'
+                    task: logger
                     options:
                         level: info
                         message: 'Books exported'

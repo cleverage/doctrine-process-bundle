@@ -9,6 +9,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask`
+* **Code**: `doctrine_database_updater` (`task: doctrine_database_updater`)
 
 Accepted inputs
 ---------------
@@ -43,7 +44,7 @@ Examples
 ```yaml
 # Task configuration level
 update_authors:
-  service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask'
+  task: doctrine_database_updater
   options:
     sql: 'UPDATE author SET firstname = :firstname WHERE lastname = :lastname'
     input_as_params: false
@@ -58,12 +59,12 @@ update_authors:
 ```yaml
 # Task configuration level
 read:
-  service: '@CleverAge\ProcessBundle\Task\File\Csv\CsvReaderTask'
+  task: csv_reader
   options:
     file_path: '%kernel.project_dir%/var/data/authors.csv' # Headers: firstname;lastname
   outputs: [insert]
 insert:
-  service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask'
+  task: doctrine_database_updater
   options:
     sql: 'INSERT INTO author (firstname, lastname) VALUES (:firstname, :lastname)'
 ```

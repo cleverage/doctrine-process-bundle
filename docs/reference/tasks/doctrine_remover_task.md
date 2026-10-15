@@ -7,6 +7,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask`
+* **Code**: `doctrine_remover` (`task: doctrine_remover`)
 
 Accepted inputs
 ---------------
@@ -34,14 +35,14 @@ Examples
 ```yaml
 # Task configuration level
 read_books:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Book'
     criteria:
       title: 'Dracula'
   outputs: [remove]
 remove:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRemoverTask'
+  task: doctrine_remover
 ```
 
 Notes

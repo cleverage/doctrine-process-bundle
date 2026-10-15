@@ -9,6 +9,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask`
+* **Code**: `doctrine_cleaner` (`task: doctrine_cleaner`)
 
 Accepted inputs
 ---------------
@@ -36,14 +37,14 @@ Examples
 ```yaml
 # Task configuration level
 read_authors:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Author'
   outputs: [export, clean]
 export:
-  service: '@CleverAge\ProcessBundle\Task\Debug\DebugTask'
+  task: debug
 clean:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineCleanerTask'
+  task: doctrine_cleaner
 ```
 
 Notes

@@ -8,6 +8,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask`
+* **Code**: `doctrine_reader` (`task: doctrine_reader`)
 * **Iterable task**
 
 Accepted inputs
@@ -43,7 +44,7 @@ Examples
 ```yaml
 # Task configuration level
 read_authors:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Author'
     criteria:
@@ -61,7 +62,7 @@ read_authors:
 ```yaml
 # Task configuration level
 read_books:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Book'
     criteria:
