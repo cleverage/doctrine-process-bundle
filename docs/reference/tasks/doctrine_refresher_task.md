@@ -7,6 +7,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask`
+* **Code**: `doctrine_refresher` (`task: doctrine_refresher`)
 
 Accepted inputs
 ---------------
@@ -35,19 +36,19 @@ Examples
 ```yaml
 # Task configuration level
 read_authors:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Author'
     criteria:
       lastname: 'King'
   outputs: [modify]
 modify:
-  service: '@CleverAge\ProcessBundle\Task\PropertySetterTask'
+  task: property_setter
   options:
     values:
       firstname: 'Gérard'
   outputs: [refresh]
 refresh:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineRefresherTask'
+  task: doctrine_refresher
   outputs: [next_task]
 ```

@@ -9,6 +9,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask`
+* **Code**: `doctrine_database_reader` (`task: doctrine_database_reader`)
 * **Iterable task**
 
 Accepted inputs
@@ -49,7 +50,7 @@ Examples
 ```yaml
 # Task configuration level
 read_books:
-  service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
+  task: doctrine_database_reader
   options:
     table: 'book'
     limit: 100
@@ -64,7 +65,7 @@ read_books:
 ```yaml
 # Task configuration level
 read_books:
-  service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
+  task: doctrine_database_reader
   options:
     sql: >
       SELECT b.id, b.title, a.lastname AS author
@@ -80,13 +81,13 @@ read_books:
 ```yaml
 # Task configuration level
 get_params:
-  service: '@CleverAge\ProcessBundle\Task\ConstantOutputTask'
+  task: constant_output
   options:
     output:
       min_id: 1000
   outputs: [read_books]
 read_books:
-  service: '@CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask'
+  task: doctrine_database_reader
   options:
     sql: 'SELECT * FROM book WHERE id >= :min_id'
     input_as_params: true

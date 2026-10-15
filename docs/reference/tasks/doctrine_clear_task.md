@@ -7,6 +7,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask`
+* **Code**: `doctrine_clear_entity_manager` (`task: doctrine_clear_entity_manager`)
 
 Accepted inputs
 ---------------
@@ -33,12 +34,12 @@ Examples
 ```yaml
 # Task configuration level
 batch_write:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
+  task: doctrine_batch_writer
   options:
     batch_count: 100
   outputs: [clear]
 clear:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask'
+  task: doctrine_clear_entity_manager
 ```
 
 * Clear a specific entity manager
@@ -46,7 +47,7 @@ clear:
 ```yaml
 # Task configuration level
 clear:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask'
+  task: doctrine_clear_entity_manager
   options:
     entity_manager: 'customer'
 ```

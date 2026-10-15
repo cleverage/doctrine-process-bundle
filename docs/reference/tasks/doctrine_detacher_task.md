@@ -8,6 +8,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask`
+* **Code**: `doctrine_detacher` (`task: doctrine_detacher`)
 
 Accepted inputs
 ---------------
@@ -35,14 +36,14 @@ Examples
 ```yaml
 # Task configuration level
 read_authors:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineReaderTask'
+  task: doctrine_reader
   options:
     class_name: 'App\Entity\Author'
   outputs: [export, detach]
 export:
-  service: '@CleverAge\ProcessBundle\Task\Debug\DebugTask'
+  task: debug
 detach:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineDetacherTask'
+  task: doctrine_detacher
 ```
 
 Notes

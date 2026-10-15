@@ -9,6 +9,7 @@ Task reference
 --------------
 
 * **Service**: `CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask`
+* **Code**: `doctrine_batch_writer` (`task: doctrine_batch_writer`)
 * **Flushable task**
 
 Accepted inputs
@@ -39,17 +40,17 @@ Examples
 ```yaml
 # Task configuration level
 denormalize:
-  service: '@CleverAge\ProcessBundle\Task\Serialization\DenormalizerTask'
+  task: denormalizer
   options:
     class: App\Entity\Author
   outputs: [batch_write]
 batch_write:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
+  task: doctrine_batch_writer
   options:
     batch_count: 100
   outputs: [clear]
 clear:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask'
+  task: doctrine_clear_entity_manager
 ```
 
 * Get back all the written entities at the end of the process
@@ -57,12 +58,12 @@ clear:
 ```yaml
 # Task configuration level
 batch_write:
-  service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
+  task: doctrine_batch_writer
   options:
     batch_count: 2
   outputs: [aggregate]
 aggregate:
-  service: '@CleverAge\ProcessBundle\Task\AggregateIterableTask' # Receives one array per batch
+  task: aggregate_iterable # Receives one array per batch
   outputs: [next_task]
 ```
 

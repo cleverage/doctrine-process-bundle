@@ -22,13 +22,13 @@ clever_age_process:
             help: 'bin/console cleverage:process:execute app.csv_to_entities_import'
             tasks:
                 read_csv:
-                    service: '@CleverAge\ProcessBundle\Task\File\Csv\CsvReaderTask'
+                    task: csv_reader
                     options:
                         file_path: '%kernel.project_dir%/var/data/authors.csv'
                     outputs: [filter_valid]
 
                 filter_valid:
-                    service: '@CleverAge\ProcessBundle\Task\FilterTask'
+                    task: filter
                     options:
                         not_empty:
                             '[firstname]': ~
@@ -37,28 +37,28 @@ clever_age_process:
                     error_outputs: [log_rejected]
 
                 log_rejected:
-                    service: '@CleverAge\ProcessBundle\Task\Reporting\LoggerTask'
+                    task: logger
                     options:
                         level: warning
                         message: 'Invalid author line'
 
                 denormalize:
-                    service: '@CleverAge\ProcessBundle\Task\Serialization\DenormalizerTask'
+                    task: denormalizer
                     options:
                         class: App\Entity\Author
                     outputs: [batch_write]
 
                 batch_write:
-                    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\DoctrineBatchWriterTask'
+                    task: doctrine_batch_writer
                     options:
                         batch_count: 200
                     outputs: [clear, count_batches]
 
                 count_batches:
-                    service: '@CleverAge\ProcessBundle\Task\Reporting\StatCounterTask'
+                    task: stat_counter
 
                 clear:
-                    service: '@CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask'
+                    task: doctrine_clear_entity_manager
 ```
 
 How it works:
