@@ -15,6 +15,9 @@ namespace CleverAge\DoctrineProcessBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * @final since 3.3
+ */
 class CleverAgeDoctrineProcessBundle extends Bundle
 {
     #[\Override]

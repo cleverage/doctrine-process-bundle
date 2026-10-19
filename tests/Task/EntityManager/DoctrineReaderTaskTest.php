@@ -70,23 +70,8 @@ class DoctrineReaderTaskTest extends TestCase
 
         $doctrine->method('getManagerForClass')->willReturn($em);
 
-        $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
-            {
-                parent::__construct($logger, $doctrine);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $task = new DoctrineReaderTask($logger, $doctrine);
 
         $state->expects($this->once())->method('setOutput')->with($entity);
         $state->expects($this->never())->method('setSkipped');
@@ -128,23 +113,8 @@ class DoctrineReaderTaskTest extends TestCase
 
         $doctrine->method('getManagerForClass')->willReturn($em);
 
-        $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
-            {
-                parent::__construct($logger, $doctrine);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $task = new DoctrineReaderTask($logger, $doctrine);
 
         $logger->expects(self::once())->method('log')->with(LogLevel::WARNING, 'Empty resultset for query');
         $state->expects($this->once())->method('setSkipped')->with(true);
@@ -186,23 +156,8 @@ class DoctrineReaderTaskTest extends TestCase
 
         $doctrine->method('getManagerForClass')->willReturn($em);
 
-        $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
-            {
-                parent::__construct($logger, $doctrine);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $task = new DoctrineReaderTask($logger, $doctrine);
 
         $task->initialize($state);
 
@@ -245,23 +200,8 @@ class DoctrineReaderTaskTest extends TestCase
 
         $doctrine->method('getManagerForClass')->willReturn(null);
 
-        $task = new class($logger, $doctrine, $options) extends DoctrineReaderTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(LoggerInterface $logger, ManagerRegistry $doctrine, private readonly array $testOptions)
-            {
-                parent::__construct($logger, $doctrine);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $task = new DoctrineReaderTask($logger, $doctrine);
 
         $task->initialize($state);
         $task->execute($state);

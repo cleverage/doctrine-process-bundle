@@ -18,6 +18,8 @@ use Doctrine\Common\Util\ClassUtils;
 
 /**
  * Remove Doctrine entities.
+ *
+ * @final since 3.3
  */
 class DoctrineRemoverTask extends AbstractDoctrineTask
 {

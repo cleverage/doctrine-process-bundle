@@ -18,6 +18,8 @@ use Doctrine\Common\Util\ClassUtils;
 
 /**
  * Clean Doctrine entities from unit of work.
+ *
+ * @final since 3.3
  */
 class DoctrineCleanerTask extends AbstractDoctrineTask
 {
