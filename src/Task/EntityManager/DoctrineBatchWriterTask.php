@@ -21,6 +21,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Persists Doctrine entities.
+ *
+ * @final since 3.3
  */
 class DoctrineBatchWriterTask extends AbstractDoctrineTask implements FlushableTaskInterface
 {

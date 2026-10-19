@@ -42,28 +42,9 @@ class DatabaseUpdaterTaskTest extends TestCase
             ->with($options['sql'], $options['params'], $options['types'])
             ->willReturn(1);
 
-        $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
-            {
-                parent::__construct($doctrine, $logger);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-
-            protected function getConnection(?ProcessState $state = null): Connection
-            {
-                return $this->testConnection;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $doctrine->method('getConnection')->willReturn($connection);
+        $task = new DatabaseUpdaterTask($doctrine, $logger);
 
         $state->expects($this->once())->method('setOutput')->with(1);
 
@@ -91,28 +72,9 @@ class DatabaseUpdaterTaskTest extends TestCase
             ->with($options['sql'], ['id' => 1, 'name' => 'test'], $options['types'])
             ->willReturn(1);
 
-        $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
-            {
-                parent::__construct($doctrine, $logger);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-
-            protected function getConnection(?ProcessState $state = null): Connection
-            {
-                return $this->testConnection;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $doctrine->method('getConnection')->willReturn($connection);
+        $task = new DatabaseUpdaterTask($doctrine, $logger);
 
         $state->expects($this->once())->method('setOutput')->with(1);
 
@@ -139,28 +101,9 @@ class DatabaseUpdaterTaskTest extends TestCase
 
         $connection = $this->createStub(Connection::class);
 
-        $task = new class($doctrine, $logger, $options, $connection) extends DatabaseUpdaterTask {
-            /**
-             * @param array<string, mixed> $testOptions
-             */
-            public function __construct(ManagerRegistry $doctrine, LoggerInterface $logger, private readonly array $testOptions, private readonly Connection $testConnection)
-            {
-                parent::__construct($doctrine, $logger);
-            }
-
-            /**
-             * @return array<string, mixed>
-             */
-            protected function getOptions(?ProcessState $state = null): array
-            {
-                return $this->testOptions;
-            }
-
-            protected function getConnection(?ProcessState $state = null): Connection
-            {
-                return $this->testConnection;
-            }
-        };
+        $state->method('getContextualizedOptions')->willReturn($options);
+        $doctrine->method('getConnection')->willReturn($connection);
+        $task = new DatabaseUpdaterTask($doctrine, $logger);
 
         $task->initialize($state);
         $task->execute($state);

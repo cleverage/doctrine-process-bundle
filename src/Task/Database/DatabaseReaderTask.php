@@ -43,6 +43,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *      'params': array<string, mixed>,
  *      'types': array<int<0, max>|string, ArrayParameterType|ParameterType|Type|string>
  *   }
+ *
+ * @final since 3.3
  */
 class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTaskInterface, FinalizableTaskInterface
 {

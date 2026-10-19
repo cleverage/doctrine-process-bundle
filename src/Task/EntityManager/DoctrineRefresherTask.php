@@ -18,6 +18,8 @@ use Doctrine\Common\Util\ClassUtils;
 
 /**
  * Refreshes a Doctrine entity from the database.
+ *
+ * @final since 3.3
  */
 class DoctrineRefresherTask extends AbstractDoctrineTask
 {

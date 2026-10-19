@@ -18,6 +18,8 @@ use Doctrine\Common\Util\ClassUtils;
 
 /**
  * Persists and flush Doctrine entities.
+ *
+ * @final since 3.3
  */
 class DoctrineWriterTask extends AbstractDoctrineTask
 {

@@ -23,6 +23,8 @@ use Psr\Log\LoggerInterface;
  * Fetch entities from doctrine.
  *
  * @phpstan-import-type Options from AbstractDoctrineQueryTask
+ *
+ * @final since 3.3
  */
 class DoctrineReaderTask extends AbstractDoctrineQueryTask implements IterableTaskInterface
 {
