@@ -98,7 +98,7 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
             }
         }
         foreach ($orderBy as $field => $order) {
-            $qb->addOrderBy("e.{$field}", $order);
+            $qb->addOrderBy("e.{$field}", $this->getSortDirection($order));
         }
         if (null !== $limit) {
             $qb->setMaxResults($limit);
@@ -108,5 +108,25 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         }
 
         return $qb;
+    }
+
+    /**
+     * doctrine/orm 3.7 deprecates the string (and null) sort directions in favor of the \SortDirection enum (PHP 8.6,
+     * polyfilled), which the previous versions do not accept (the enum may exist with them, e.g. on PHP 8.6).
+     */
+    private function getSortDirection(?string $order): \SortDirection|string|null
+    {
+        static $acceptsSortDirection = null;
+        $acceptsSortDirection ??= str_contains((string) (new \ReflectionMethod(QueryBuilder::class, 'addOrderBy'))->getParameters()[1]->getType(), 'SortDirection');
+        if (!$acceptsSortDirection) {
+            return $order;
+        }
+
+        return match (strtolower($order ?? 'asc')) {
+            'asc' => \SortDirection::Ascending,
+            'desc' => \SortDirection::Descending,
+            // Invalid direction: rejected by doctrine/orm, as before
+            default => $order,
+        };
     }
 }

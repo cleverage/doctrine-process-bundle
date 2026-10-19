@@ -24,11 +24,18 @@ jobs:
           - '8.3'
           - '8.4'
           - '8.5'
-        dependencies: [highest, lowest]
+        dependencies: [highest]
         allowed-to-fail: [false]
         symfony-require: ['']
         variant: [normal]
         include:
+          # Lowest versions allowed by composer.json, on the lowest supported PHP version (with a newer PHP, they
+          # trigger PHP deprecations, e.g. implicitly nullable parameters with PHP 8.4, which fail the tests)
+          - php-version: '8.2'
+            dependencies: lowest
+            allowed-to-fail: false
+            symfony-require: ''
+            variant: normal
           - php-version: '8.2'
             dependencies: lowest
             allowed-to-fail: false
