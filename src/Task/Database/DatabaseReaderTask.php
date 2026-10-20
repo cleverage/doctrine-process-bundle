@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Task\Database;
 
+use CleverAge\DoctrineProcessBundle\Exception\UnexpectedValueException;
 use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\FinalizableTaskInterface;
 use CleverAge\ProcessBundle\Model\IterableTaskInterface;
@@ -155,7 +156,7 @@ class DatabaseReaderTask extends AbstractConfigurableTask implements IterableTas
         $inputAsParams = $state->getInput();
         $params = $options['input_as_params'] ? $inputAsParams : $options['params'];
         if (!\is_array($params)) {
-            throw new \UnexpectedValueException('Expecting an array of params');
+            throw new UnexpectedValueException('Expecting an array of params');
         }
 
         /** @var array<string, mixed> $params */

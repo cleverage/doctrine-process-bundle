@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Task\Database;
 
+use CleverAge\DoctrineProcessBundle\Exception\UnexpectedValueException;
 use CleverAge\ProcessBundle\Model\AbstractConfigurableTask;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\DBAL\ArrayParameterType;
@@ -67,7 +68,7 @@ class DatabaseUpdaterTask extends AbstractConfigurableTask
         $inputAsParams = $state->getInput();
         $params = $options['input_as_params'] ? $inputAsParams : $options['params'];
         if (!\is_array($params)) {
-            throw new \UnexpectedValueException('Expecting an array of params');
+            throw new UnexpectedValueException('Expecting an array of params');
         }
 
         /** @var array<string, mixed> $params */

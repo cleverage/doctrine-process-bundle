@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
+use CleverAge\DoctrineProcessBundle\Exception\UnexpectedValueException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Psr\Log\LogLevel;
@@ -83,7 +84,7 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
             if (preg_match('/[^a-zA-Z0-9]/', $field)) {
-                throw new \UnexpectedValueException("Forbidden field name '{$field}'");
+                throw new UnexpectedValueException("Forbidden field name '{$field}'");
             }
             $parameterName = 'param_'.bin2hex(random_bytes(4));
             if (null === $value) {

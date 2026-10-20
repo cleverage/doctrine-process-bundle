@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
+use CleverAge\DoctrineProcessBundle\Exception\RuntimeException;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 
@@ -35,7 +36,7 @@ class DoctrineWriterTask extends AbstractDoctrineTask
         $entity = $state->getInput();
 
         if (null === $entity) {
-            throw new \RuntimeException('DoctrineWriterTask does not allow null input');
+            throw new RuntimeException('DoctrineWriterTask does not allow null input');
         }
         $class = ClassUtils::getClass($entity);
         $entityManager = $this->getEntityManager($state, $class);
