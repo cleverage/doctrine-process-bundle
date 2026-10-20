@@ -37,6 +37,13 @@ class AbstractDoctrineQueryTaskTest extends TestCase
         $method->invoke($task, $repository, ['e.field; DROP TABLE dummy;' => 'value'], []);
     }
 
+    public function testGetQueryBuilderWithDescendingOrder(): void
+    {
+        $qb = $this->getQueryBuilder([], ['title' => 'DESC']);
+
+        self::assertSame('SELECT e FROM App\\Entity\\Book e ORDER BY e.title DESC', $qb->getDQL());
+    }
+
     public function testGetQueryBuilder(): void
     {
         $qb = $this->getQueryBuilder(
