@@ -49,7 +49,7 @@
       }
     },
     "require": {
-        "php": ">=8.2",
+        "php": "^8.2",
         "cleverage/process-bundle": "^5.0",
         "doctrine/common": "^3.5",
         "doctrine/dbal": "^3.7 || ^4",
@@ -83,7 +83,6 @@
     "config": {
       "allow-plugins": {
         "phpstan/extension-installer": true,
-        "symfony/flex": true,
         "symfony/runtime": true
       },
       "sort-packages": true
