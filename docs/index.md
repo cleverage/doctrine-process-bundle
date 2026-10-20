@@ -64,6 +64,8 @@ Their service id is their class name. Fetching them directly from the service co
 will be private in 4.0); their former ids, `cleverage_doctrine_process.task.*` (e.g.
 `cleverage_doctrine_process.task.doctrine_reader`), are deprecated aliases since 3.3, removed in 4.0.
 
+No option can be configured under `clever_age_doctrine_process`: a key there is ignored. Configuring one is deprecated since 3.3 (an `E_USER_DEPRECATED` error is triggered when the container is compiled), the keys will be rejected in 4.0.
+
 ## Documentation
 
 - Cookbooks

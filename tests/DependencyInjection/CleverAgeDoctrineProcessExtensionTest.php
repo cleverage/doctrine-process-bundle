@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace CleverAge\DoctrineProcessBundle\Tests\DependencyInjection;
 
 use CleverAge\DoctrineProcessBundle\DependencyInjection\CleverAgeDoctrineProcessExtension;
+use CleverAge\DoctrineProcessBundle\DependencyInjection\Configuration;
 use CleverAge\DoctrineProcessBundle\Task\Database\DatabaseReaderTask;
 use CleverAge\DoctrineProcessBundle\Task\Database\DatabaseUpdaterTask;
 use CleverAge\DoctrineProcessBundle\Task\EntityManager\ClearEntityManagerTask;
@@ -32,6 +33,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Yaml;
 
 #[CoversClass(CleverAgeDoctrineProcessExtension::class)]
+#[CoversClass(Configuration::class)]
 class CleverAgeDoctrineProcessExtensionTest extends TestCase
 {
     public function testEveryServiceDefinitionFileIsLoaded(): void
@@ -170,5 +172,53 @@ class CleverAgeDoctrineProcessExtensionTest extends TestCase
             static fn (string $id): bool => str_starts_with($id, 'cleverage_doctrine_process.task.')
         );
         self::assertEqualsCanonicalizing(array_column(iterator_to_array(self::provideTasks()), 2), array_values($aliases));
+    }
+
+    public function testConfigurationKeysAreDeprecated(): void
+    {
+        $deprecations = $this->collectDeprecations(static function (): void {
+            (new CleverAgeDoctrineProcessExtension())->load([[], ['foo' => true], ['bar' => 1, 'foo' => false]], new ContainerBuilder());
+        });
+
+        self::assertSame(['Since cleverage/doctrine-process-bundle 3.3: Configuring "clever_age_doctrine_process" is deprecated, the bundle has no configuration: the keys "foo", "bar" are ignored. They will be rejected in 4.0.'], $deprecations);
+    }
+
+    public function testNoDeprecationWithoutConfigurationKey(): void
+    {
+        $deprecations = $this->collectDeprecations(static function (): void {
+            (new CleverAgeDoctrineProcessExtension())->load([[], []], new ContainerBuilder());
+        });
+
+        self::assertSame([], $deprecations);
+    }
+
+    public function testConfigurationHasNoOption(): void
+    {
+        $configuration = (new CleverAgeDoctrineProcessExtension())->getConfiguration([], new ContainerBuilder());
+
+        self::assertInstanceOf(Configuration::class, $configuration);
+        self::assertSame('clever_age_doctrine_process', $configuration->getConfigTreeBuilder()->buildTree()->getName());
+    }
+
+    /**
+     * @param callable(): void $callback
+     *
+     * @return list<string>
+     */
+    private function collectDeprecations(callable $callback): array
+    {
+        $deprecations = [];
+        set_error_handler(static function (int $errno, string $errstr) use (&$deprecations): bool {
+            $deprecations[] = $errstr;
+
+            return true;
+        }, \E_USER_DEPRECATED);
+        try {
+            $callback();
+        } finally {
+            restore_error_handler();
+        }
+
+        return $deprecations;
     }
 }
