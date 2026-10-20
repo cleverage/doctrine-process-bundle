@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Task\EntityManager;
 
+use CleverAge\DoctrineProcessBundle\Exception\RuntimeException;
 use CleverAge\ProcessBundle\Model\ProcessState;
 use Doctrine\Common\Util\ClassUtils;
 
@@ -27,7 +28,7 @@ class DoctrineCleanerTask extends AbstractDoctrineTask
     {
         $entity = $state->getInput();
         if (null === $entity) {
-            throw new \RuntimeException('DoctrineCleanerTask does not allow null input');
+            throw new RuntimeException('DoctrineCleanerTask does not allow null input');
         }
         /** @var object $entity */
         $class = ClassUtils::getClass($entity);
