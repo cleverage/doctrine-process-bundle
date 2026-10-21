@@ -180,7 +180,7 @@ class CleverAgeDoctrineProcessExtensionTest extends TestCase
             (new CleverAgeDoctrineProcessExtension())->load([[], ['foo' => true], ['bar' => 1, 'foo' => false]], new ContainerBuilder());
         });
 
-        self::assertSame(['Since cleverage/doctrine-process-bundle 3.3: Configuring "clever_age_doctrine_process" is deprecated, the bundle has no configuration: the keys "foo", "bar" are ignored. They will be rejected in 4.0.'], $deprecations);
+        self::assertSame(['Since cleverage/doctrine-process-bundle 3.3: Configuring "cleverage_doctrine_process" is deprecated, the bundle has no configuration: the keys "foo", "bar" are ignored. They will be rejected in 4.0.'], $deprecations);
     }
 
     public function testNoDeprecationWithoutConfigurationKey(): void
@@ -197,7 +197,7 @@ class CleverAgeDoctrineProcessExtensionTest extends TestCase
         $configuration = (new CleverAgeDoctrineProcessExtension())->getConfiguration([], new ContainerBuilder());
 
         self::assertInstanceOf(Configuration::class, $configuration);
-        self::assertSame('clever_age_doctrine_process', $configuration->getConfigTreeBuilder()->buildTree()->getName());
+        self::assertSame('cleverage_doctrine_process', $configuration->getConfigTreeBuilder()->buildTree()->getName());
     }
 
     /**

@@ -14,10 +14,13 @@ declare(strict_types=1);
 namespace CleverAge\DoctrineProcessBundle\Tests;
 
 use CleverAge\DoctrineProcessBundle\CleverAgeDoctrineProcessBundle;
+use CleverAge\DoctrineProcessBundle\DependencyInjection\CleverAgeDoctrineProcessExtension;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(CleverAgeDoctrineProcessBundle::class)]
+#[UsesClass(CleverAgeDoctrineProcessExtension::class)]
 class CleverAgeDoctrineProcessBundleTest extends TestCase
 {
     public function testPathIsTheBundleRoot(): void
@@ -26,5 +29,16 @@ class CleverAgeDoctrineProcessBundleTest extends TestCase
 
         self::assertSame(\dirname(__DIR__), $path);
         self::assertDirectoryExists($path.'/config/services');
+    }
+
+    public function testExtensionAlias(): void
+    {
+        $bundle = new CleverAgeDoctrineProcessBundle();
+        $extension = $bundle->getContainerExtension();
+
+        self::assertInstanceOf(CleverAgeDoctrineProcessExtension::class, $extension);
+        self::assertSame('cleverage_doctrine_process', $extension->getAlias());
+        // Built once
+        self::assertSame($extension, $bundle->getContainerExtension());
     }
 }
