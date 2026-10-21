@@ -50,5 +50,5 @@ Notes
 -----
 
 * Only the input entity is detached (and its associations configured with `cascade: [detach]`); to detach all the
-  entities at once, use the [ClearEntityManagerTask](doctrine_clear_task.md) or the
+  entities at once, use the [ClearEntityManagerTask](clear_entity_manager_task.md) or the
   [DoctrineCleanerTask](doctrine_cleaner_task.md).

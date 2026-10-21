@@ -2,7 +2,7 @@ DoctrineWriterTask
 ==================
 
 Persists the entity received as input and immediately flushes its entity manager, then outputs the entity. Suited for
-low volumes; prefer the [DoctrineBatchWriterTask](doctrine_batchwriter_task.md) for big imports.
+low volumes; prefer the [DoctrineBatchWriterTask](doctrine_batch_writer_task.md) for big imports.
 
 Task reference
 --------------
