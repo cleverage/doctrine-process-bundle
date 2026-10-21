@@ -1,7 +1,12 @@
 Latest
 ------
 
+v3.3
+------
+
 ### Changes
+* Require `cleverage/process-bundle` `^5.4`.
+* Please follow [UPGRADE.md v3.3](UPGRADE.md#v33)
 * [#66](https://github.com/cleverage/doctrine-process-bundle/issues/66) The configuration key of the bundle (its extension alias) is `cleverage_doctrine_process`, instead of `clever_age_doctrine_process` (no option could be configured there). Configuring a key under `cleverage_doctrine_process` is deprecated: the bundle has no configuration and the keys were ignored without notice (new internal `Configuration`, empty; notice when the container is compiled). They will be rejected in 4.0. Require `symfony/deprecation-contracts`, used directly. Update documentation, add tests.
 * [#64](https://github.com/cleverage/doctrine-process-bundle/issues/64) The bundle throws exceptions implementing `ProcessExceptionInterface` of the process bundle instead of raw SPL exceptions (as [cleverage/process-bundle#317](https://github.com/cleverage/process-bundle/issues/317)): new `Exception\UnexpectedValueException` and `Exception\RuntimeException`, extending the SPL exceptions thrown before (same messages, the existing `catch` keep working). Add tests.
 * [#62](https://github.com/cleverage/doctrine-process-bundle/issues/62) Composer: require PHP `^8.2` instead of `>=8.2` (PHP 9 is no longer accepted before being tested), remove the authorization of the `symfony/flex` plugin, which is not required (the CI installs it globally), as [cleverage/process-bundle#319](https://github.com/cleverage/process-bundle/issues/319).

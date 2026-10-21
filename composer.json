@@ -45,7 +45,7 @@
     },
     "require": {
         "php": "^8.2",
-        "cleverage/process-bundle": "^5.0",
+        "cleverage/process-bundle": "^5.4",
         "doctrine/common": "^3.5",
         "doctrine/dbal": "^3.7|^4",
         "doctrine/doctrine-bundle": "^2.18|^3.1",
