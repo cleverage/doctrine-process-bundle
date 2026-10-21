@@ -99,6 +99,14 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
             }
         }
         foreach ($orderBy as $field => $order) {
+            // The field and the direction are inserted in the DQL, and can come from the context or the input: only a
+            // field path and asc / desc are accepted
+            if (!preg_match('/^[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*$/', (string) $field)) {
+                throw new UnexpectedValueException("Forbidden order by field name '{$field}'");
+            }
+            if (null !== $order && !\in_array(strtolower($order), ['asc', 'desc'], true)) {
+                throw new UnexpectedValueException("Forbidden order by direction '{$order}' for field '{$field}', expected 'asc' or 'desc'");
+            }
             $qb->addOrderBy("e.{$field}", $this->getSortDirection($order));
         }
         if (null !== $limit) {
@@ -123,11 +131,7 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
             return $order;
         }
 
-        return match (strtolower($order ?? 'asc')) {
-            'asc' => \SortDirection::Ascending,
-            'desc' => \SortDirection::Descending,
-            // Invalid direction: rejected by doctrine/orm, as before
-            default => $order,
-        };
+        // The direction is validated by getQueryBuilder()
+        return 'desc' === strtolower($order ?? 'asc') ? \SortDirection::Descending : \SortDirection::Ascending;
     }
 }
