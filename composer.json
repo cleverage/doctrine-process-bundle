@@ -15,53 +15,48 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Vincent Chalnot",
-            "email": "vchalnot@clever-age.com",
-            "homepage": "http://chalnot.fr",
-            "role": "Lead Developer"
+            "name": "Nicolas Joubert",
+            "email": "njoubert@clever-age.com",
+            "homepage": "https://github.com/njoubert-cleverage",
+            "role": "Maintainer"
         },
         {
-            "name": "Valentin Clavreul",
-            "email": "vclavreul@clever-age.com",
-            "role": "Developer"
+            "name": "Xavier Marchegay",
+            "email": "xmarchegay@clever-age.com",
+            "homepage": "https://github.com/xaviermarchegay",
+            "role": "Maintainer"
         },
         {
-            "name": "Madeline Veyrenc",
-            "email": "mveyrenc@clever-age.com",
-            "homepage": "https://github.com/mveyrenc",
-            "role": "Developer"
-        },
-        {
-          "name": "Xavier Marchegay",
-          "email": "xmarchegay@clever-age.com",
-          "homepage": "https://github.com/xaviermarchegay",
-          "role": "Lead Developer"
+            "name": "Grégory Tonon",
+            "email": "gtonon@clever-age.com",
+            "homepage": "https://github.com/clever-age-gtonon",
+            "role": "Maintainer"
         }
     ],
     "autoload": {
-      "psr-4": {
-        "CleverAge\\DoctrineProcessBundle\\": "src/"
-      }
+        "psr-4": {
+            "CleverAge\\DoctrineProcessBundle\\": "src/"
+        }
     },
     "autoload-dev": {
-      "psr-4": {
-        "CleverAge\\DoctrineProcessBundle\\Tests\\": "tests/"
-      }
+        "psr-4": {
+            "CleverAge\\DoctrineProcessBundle\\Tests\\": "tests/"
+        }
     },
     "require": {
         "php": "^8.2",
         "cleverage/process-bundle": "^5.0",
         "doctrine/common": "^3.5",
-        "doctrine/dbal": "^3.7 || ^4",
-        "doctrine/doctrine-bundle": "^2.18 || ^3.1",
-        "doctrine/orm": "^2.20 || ^3.5",
-        "doctrine/persistence": "^3.1 || ^4",
-        "psr/log": "^2 || ^3",
-        "symfony/config": "^6.4 || ^7.4 || ^8",
-        "symfony/dependency-injection": "^6.4 || ^7.4 || ^8",
-        "symfony/deprecation-contracts": "^2.5 || ^3",
-        "symfony/http-kernel": "^6.4 || ^7.4 || ^8",
-        "symfony/options-resolver": "^6.4 || ^7.4 || ^8",
+        "doctrine/dbal": "^3.7|^4",
+        "doctrine/doctrine-bundle": "^2.18|^3.1",
+        "doctrine/orm": "^2.20|^3.5",
+        "doctrine/persistence": "^3.1|^4",
+        "psr/log": "^2|^3",
+        "symfony/config": "^6.4|^7.4|^8",
+        "symfony/dependency-injection": "^6.4|^7.4|^8",
+        "symfony/deprecation-contracts": "^2.5|^3",
+        "symfony/http-kernel": "^6.4|^7.4|^8",
+        "symfony/options-resolver": "^6.4|^7.4|^8",
         "symfony/polyfill-php83": "^1.33",
         "symfony/polyfill-php84": "^1.33",
         "symfony/polyfill-php85": "^1.33"
@@ -72,20 +67,20 @@
         "phpstan/phpstan": "*",
         "phpstan/phpstan-doctrine": "*",
         "phpstan/phpstan-symfony": "*",
-        "phpunit/phpunit": "^10.5 || ^11 || ^12 || ^13",
+        "phpunit/phpunit": "^10.5|^11|^12|^13",
         "rector/rector": "*",
         "roave/security-advisories": "dev-latest",
-        "symfony/framework-bundle": "^6.4 || ^7.4 || ^8",
+        "symfony/framework-bundle": "^6.4|^7.4|^8",
         "symfony/test-pack": "^1.1"
     },
     "suggest": {
         "doctrine/doctrine-migrations-bundle": "To version the database schema of the entities read and written by the processes"
     },
     "config": {
-      "allow-plugins": {
-        "phpstan/extension-installer": true,
-        "symfony/runtime": true
-      },
-      "sort-packages": true
+        "allow-plugins": {
+            "phpstan/extension-installer": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
     }
 }

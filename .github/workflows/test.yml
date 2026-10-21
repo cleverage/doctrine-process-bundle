@@ -29,18 +29,12 @@ jobs:
         symfony-require: ['']
         variant: [normal]
         include:
-          # Lowest versions allowed by composer.json, on the lowest supported PHP version (with a newer PHP, they
-          # trigger PHP deprecations, e.g. implicitly nullable parameters with PHP 8.4, which fail the tests)
+          # Lowest versions allowed by composer.json, on the lowest supported PHP version
           - php-version: '8.2'
             dependencies: lowest
             allowed-to-fail: false
             symfony-require: ''
             variant: normal
-          - php-version: '8.2'
-            dependencies: lowest
-            allowed-to-fail: false
-            symfony-require: 6.4.*
-            variant: symfony/symfony:"6.4.*"
           - php-version: '8.2'
             dependencies: highest
             allowed-to-fail: false
