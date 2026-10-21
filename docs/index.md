@@ -48,7 +48,7 @@ doctrine:
 * **EntityManager** tasks work with Doctrine ORM entities. Their `entity_manager` option takes the name of an entity
   manager (a key under `doctrine.orm.entity_managers`); if it is not set, they use the entity manager that manages the
   class of the handled entity (the default entity manager for the
-  [ClearEntityManagerTask](reference/tasks/doctrine_clear_task.md)).
+  [ClearEntityManagerTask](reference/tasks/clear_entity_manager_task.md)).
 
 See the [DoctrineBundle documentation](https://symfony.com/bundles/DoctrineBundle/current/configuration.html) for the
 configuration of multiple connections and entity managers.
@@ -77,8 +77,8 @@ No option can be configured under `cleverage_doctrine_process`: a key there is i
             - [DatabaseReaderTask](reference/tasks/database_reader_task.md)
             - [DatabaseUpdaterTask](reference/tasks/database_updater_task.md)
         - EntityManager
-            - [ClearEntityManagerTask](reference/tasks/doctrine_clear_task.md)
-            - [DoctrineBatchWriterTask](reference/tasks/doctrine_batchwriter_task.md)
+            - [ClearEntityManagerTask](reference/tasks/clear_entity_manager_task.md)
+            - [DoctrineBatchWriterTask](reference/tasks/doctrine_batch_writer_task.md)
             - [DoctrineCleanerTask](reference/tasks/doctrine_cleaner_task.md)
             - [DoctrineDetacherTask](reference/tasks/doctrine_detacher_task.md)
             - [DoctrineReaderTask](reference/tasks/doctrine_reader_task.md)

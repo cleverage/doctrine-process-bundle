@@ -75,4 +75,4 @@ Notes
 * Options are resolved once per task instance: values coming from the context (`{{ key }}`) are replaced on the first
   execution.
 * Each execution runs the statement immediately, outside any explicit transaction: for big volumes, consider a
-  single set-based statement, or the [DoctrineBatchWriterTask](doctrine_batchwriter_task.md) with entities.
+  single set-based statement, or the [DoctrineBatchWriterTask](doctrine_batch_writer_task.md) with entities.

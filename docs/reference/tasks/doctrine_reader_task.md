@@ -77,7 +77,7 @@ Notes
 
 * The query is executed on the first execution of the task, then the entities are hydrated one at a time while the
   process iterates (`Query::toIterable()`). They stay managed by the entity manager: for big volumes, clear it
-  downstream (see [ClearEntityManagerTask](doctrine_clear_task.md)) or detach the entities (see
+  downstream (see [ClearEntityManagerTask](clear_entity_manager_task.md)) or detach the entities (see
   [DoctrineDetacherTask](doctrine_detacher_task.md)) to keep the memory usage low, or read raw rows with the
   [DatabaseReaderTask](database_reader_task.md).
 * Entities stay managed by the entity manager: they can be modified then saved with the

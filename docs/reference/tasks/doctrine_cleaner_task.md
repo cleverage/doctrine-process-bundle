@@ -51,4 +51,4 @@ Notes
 -----
 
 * Pending changes that have not been flushed are lost.
-* To clear an entity manager without any input, or by its name, use the [ClearEntityManagerTask](doctrine_clear_task.md).
+* To clear an entity manager without any input, or by its name, use the [ClearEntityManagerTask](clear_entity_manager_task.md).

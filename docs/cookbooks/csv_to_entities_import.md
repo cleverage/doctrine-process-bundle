@@ -70,10 +70,10 @@ How it works:
   [LoggerTask](https://github.com/cleverage/process-bundle/blob/main/docs/reference/tasks/logger_task.md) logs them.
 - [DenormalizerTask](https://github.com/cleverage/process-bundle/blob/main/docs/reference/tasks/denormalizer_task.md)
   creates a new `App\Entity\Author` from each line, using the Symfony Serializer.
-- [DoctrineBatchWriterTask](../reference/tasks/doctrine_batchwriter_task.md) buffers the entities and skips its
+- [DoctrineBatchWriterTask](../reference/tasks/doctrine_batch_writer_task.md) buffers the entities and skips its
   outputs until 200 entities are buffered; it then persists and flushes them in one go and outputs the batch. The last
   incomplete batch is written when the task is flushed, at the end of the file.
-- [ClearEntityManagerTask](../reference/tasks/doctrine_clear_task.md) is only executed after each written batch: it
+- [ClearEntityManagerTask](../reference/tasks/clear_entity_manager_task.md) is only executed after each written batch: it
   detaches the written entities so that they can be garbage collected.
 - [StatCounterTask](https://github.com/cleverage/process-bundle/blob/main/docs/reference/tasks/stat_counter_task.md)
   counts the written batches and logs the total at the end of the process.
