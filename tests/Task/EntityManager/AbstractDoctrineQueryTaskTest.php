@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace CleverAge\DoctrineProcessBundle\Tests\Task\EntityManager;
 
+use CleverAge\DoctrineProcessBundle\Exception\UnexpectedValueException;
 use CleverAge\DoctrineProcessBundle\Task\EntityManager\AbstractDoctrineQueryTask;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(AbstractDoctrineQueryTask::class)]
@@ -35,6 +37,39 @@ class AbstractDoctrineQueryTaskTest extends TestCase
         $method = $reflection->getMethod('getQueryBuilder');
 
         $method->invoke($task, $repository, ['e.field; DROP TABLE dummy;' => 'value'], []);
+    }
+
+    /**
+     * The order by field and direction are inserted in the DQL and can come from the context or the input: anything
+     * else than a field path and asc / desc would allow DQL injection (e.g. a sub-query reading other entities).
+     *
+     * @param array<string, string|null> $orderBy
+     */
+    #[DataProvider('provideInvalidOrderBy')]
+    public function testGetQueryBuilderWithInvalidOrderBy(array $orderBy): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+
+        $this->getQueryBuilder([], $orderBy);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string|null>}>
+     */
+    public static function provideInvalidOrderBy(): iterable
+    {
+        yield 'expression as field' => [['id - e.id, CASE WHEN (SELECT COUNT(u.id) FROM App\\Entity\\User u) > 0 THEN e.title ELSE e.id END' => 'ASC']];
+        yield 'second order by in the field' => [['title DESC, e.id' => 'ASC']];
+        yield 'empty field' => [['' => 'ASC']];
+        yield 'expression as direction' => [['title' => 'DESC, e.id']];
+        yield 'unknown direction' => [['title' => 'up']];
+    }
+
+    public function testGetQueryBuilderWithFieldPathAndLowercaseDirection(): void
+    {
+        $qb = $this->getQueryBuilder([], ['created_at' => 'desc', 'address.city' => 'asc']);
+
+        self::assertSame('SELECT e FROM App\\Entity\\Book e ORDER BY e.created_at DESC, e.address.city ASC', $qb->getDQL());
     }
 
     public function testGetQueryBuilderWithDescendingOrder(): void
