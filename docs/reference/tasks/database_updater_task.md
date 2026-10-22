@@ -15,7 +15,7 @@ Accepted inputs
 ---------------
 
 `array`: the statement parameters, when `input_as_params` is `true` (default). Any other type throws an
-`\UnexpectedValueException`.
+`UnexpectedValueException`.
 
 If `input_as_params` is `false`, input is ignored and the `params` option is used.
 

@@ -16,7 +16,7 @@ Accepted inputs
 ---------------
 
 `object`: a Doctrine entity (new or already managed). An object whose class is not managed by any entity manager
-throws an `\UnexpectedValueException` when the batch is written.
+throws an `UnexpectedValueException` when the batch is written.
 
 Possible outputs
 ----------------
