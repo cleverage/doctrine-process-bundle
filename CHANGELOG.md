@@ -1,6 +1,9 @@
 Latest
 ------
 
+v3.3.1
+------
+
 ### Fixes
 * [GHSA-hrcr-p9pc-8vfr](https://github.com/cleverage/doctrine-process-bundle/security/advisories/GHSA-hrcr-p9pc-8vfr) `AbstractDoctrineQueryTask` (`doctrine_reader`): the `order_by` keys must be a field name or path (letters, digits, `_` and `.`) and its directions `asc` or `desc` (case-insensitive) or `null`, otherwise an `UnexpectedValueException` is thrown: they were inserted as is in the DQL, which allowed DQL injection when `order_by` comes from the context or the input.
 
