@@ -1,6 +1,12 @@
 Latest
 ------
 
+v3.3.2                                                                                                                               
+------                                                                                                                               
+                                                                                                                                       
+### Fixes                                                                                                                            
+* [#72](https://github.com/cleverage/doctrine-process-bundle/issues/72) `AbstractDoctrineQueryTask` (`doctrine_reader`): the `order_by` direction is uppercased with doctrine/orm < 3.7 too (it was passed as is when the ORM does not accept the `\SortDirection` enum), so that the generated DQL no longer depends on the ORM version.
+
 v3.3.1
 ------
 
