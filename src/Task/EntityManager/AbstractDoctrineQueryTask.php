@@ -128,7 +128,8 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
         static $acceptsSortDirection = null;
         $acceptsSortDirection ??= str_contains((string) (new \ReflectionMethod(QueryBuilder::class, 'addOrderBy'))->getParameters()[1]->getType(), 'SortDirection');
         if (!$acceptsSortDirection) {
-            return $order;
+            // The direction is validated by getQueryBuilder(): uppercase, as the \SortDirection values
+            return null === $order ? null : strtoupper($order);
         }
 
         // The direction is validated by getQueryBuilder()
