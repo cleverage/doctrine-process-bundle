@@ -4,10 +4,10 @@ Latest
 ### Changes
 * [#81](https://github.com/cleverage/doctrine-process-bundle/issues/81) Reference pages: exceptions of the bundle, type of the `table` option of `doctrine_database_reader`.
 
-v3.3.2                                                                                                                               
-------                                                                                                                               
-                                                                                                                                       
-### Fixes                                                                                                                            
+v3.3.2
+------
+
+### Fixes
 * [#72](https://github.com/cleverage/doctrine-process-bundle/issues/72) `AbstractDoctrineQueryTask` (`doctrine_reader`): the `order_by` direction is uppercased with doctrine/orm < 3.7 too (it was passed as is when the ORM does not accept the `\SortDirection` enum), so that the generated DQL no longer depends on the ORM version.
 
 v3.3.1
@@ -88,14 +88,14 @@ v2.0
 
 ## BC breaks
 
-* [#6](https://github.com/cleverage/doctrine-process-bundle/issues/6) Update services according to Symfony best practices. 
+* [#6](https://github.com/cleverage/doctrine-process-bundle/issues/6) Update services according to Symfony best practices.
 Services should not use autowiring or autoconfiguration. Instead, all services should be defined explicitly.
   Services must be prefixed with the bundle alias instead of using fully qualified class names => `cleverage_doctrine_process`
 * [#5](https://github.com/cleverage/doctrine-process-bundle/issues/5) Bump "doctrine/doctrine-bundle": "^2.5" according to Symfony versions supported by `cleverage/process-bundle`
 * [#4](https://github.com/cleverage/doctrine-process-bundle/issues/4) Allow installing "doctrine/orm": ^3.0 using at least require "doctrine/orm": "^2.9 || ^3.0".
 Forbid "doctrine/dbal" 4 for now (as on "symfony/orm-pack" - symfony/orm-pack@266bae0#diff-d2ab9925cad7eac58e0ff4cc0d251a937ecf49e4b6bf57f8b95aab76648a9d34R7 ) using "doctrine/dbal": "^2.9 || ^3.0".
 Add "doctrine/common": "^3.0" and "doctrine/doctrine-migrations-bundle": "^3.2"
-* [#4](https://github.com/cleverage/doctrine-process-bundle/issues/4) Remove DoctrineWriterTask option `global_flush` 
+* [#4](https://github.com/cleverage/doctrine-process-bundle/issues/4) Remove DoctrineWriterTask option `global_flush`
 due to removing [partially flush ability](https://github.com/doctrine/orm/blob/3.0.x/UPGRADE.md#bc-break-removed-ability-to-partially-flushcommit-entity-manager-and-unit-of-work) on `doctrine/orm` 3.*
 * [#12](https://github.com/cleverage/doctrine-process-bundle/issues/12) Remove PurgeDoctrineCacheTask
 
