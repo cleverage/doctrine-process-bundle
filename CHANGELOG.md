@@ -1,6 +1,9 @@
 Latest
 ------
 
+v3.4
+------
+
 ### Changes
 * [#81](https://github.com/cleverage/doctrine-process-bundle/issues/81) Reference pages: exceptions of the bundle, type of the `table` option of `doctrine_database_reader`.
 
