@@ -13,8 +13,8 @@ Task reference
 Accepted inputs
 ---------------
 
-`object`: a Doctrine entity. A `null` input throws a `\RuntimeException`, and an object whose class is not managed by
-any entity manager throws an `\UnexpectedValueException`. Underlying method is Doctrine `EntityManager::detach()`.
+`object`: a Doctrine entity. A `null` input throws a `RuntimeException`, and an object whose class is not managed by
+any entity manager throws an `UnexpectedValueException`. Underlying method is Doctrine `EntityManager::detach()`.
 
 Possible outputs
 ----------------

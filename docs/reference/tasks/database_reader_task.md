@@ -16,7 +16,7 @@ Accepted inputs
 ---------------
 
 Input is ignored, unless `input_as_params` is `true`: the input is then used as the query parameters and must be an
-`array` (otherwise an `\UnexpectedValueException` is thrown).
+`array` (otherwise an `UnexpectedValueException` is thrown).
 
 Possible outputs
 ----------------
@@ -31,7 +31,7 @@ Options
 
 | Code              | Type          | Required | Default   | Description                                                                                                                                                                                                                        |
 |-------------------|---------------|:--------:|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `table`           | `string`      |          |           | Table to read from: the query is `SELECT tbl.* FROM <table> tbl`.<br/>Required when `sql` is not set (ignored otherwise)                                                                                                           |
+| `table`           | `?string`     |          | `null`    | Table to read from: the query is `SELECT tbl.* FROM <table> tbl`.<br/>Required when `sql` is not set (ignored otherwise)                                                                                                           |
 | `connection`      | `string\|null` |          | `null`    | Name of the Doctrine DBAL connection (as defined in `doctrine.dbal.connections`). If `null`, the default connection is used                                                                                                        |
 | `sql`             | `string\|null` |          | `null`    | Custom SQL query to execute, with optional named (`:name`) or positional (`?`) parameters                                                                                                                                          |
 | `limit`           | `int\|null`    |          | `null`    | Maximum number of rows. Only used when `sql` is not set                                                                                                                                                                            |

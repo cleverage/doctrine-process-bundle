@@ -13,8 +13,8 @@ Task reference
 Accepted inputs
 ---------------
 
-`object`: a Doctrine entity (new or already managed). A `null` input throws a `\RuntimeException`, and an object whose
-class is not managed by any entity manager throws an `\UnexpectedValueException`.
+`object`: a Doctrine entity (new or already managed). A `null` input throws a `RuntimeException`, and an object whose
+class is not managed by any entity manager throws an `UnexpectedValueException`.
 
 Possible outputs
 ----------------
