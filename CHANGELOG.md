@@ -1,6 +1,9 @@
 Latest
 ------
 
+v3.4.1
+------
+
 ### Fixes
 * [#87](https://github.com/cleverage/doctrine-process-bundle/issues/87) `DoctrineBatchWriterTask` (`doctrine_batch_writer`): a batch whose writing fails is removed from the buffer and detached from its entity manager if it is still open. It stayed in the buffer, so every following batch failed again (all the next entities were lost with `error_strategy: skip`) and the buffer grew beyond `batch_count`. Document that the whole batch is lost on failure. Add tests.
 
