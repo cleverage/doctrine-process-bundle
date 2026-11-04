@@ -194,6 +194,109 @@ class DoctrineBatchWriterTaskTest extends TestCase
         $writeBatchMethod->invoke($task, $state);
     }
 
+    public function testFailedBatchIsNotWrittenAgainWithTheNextOne(): void
+    {
+        $entity1 = new \stdClass();
+        $entity2 = new \stdClass();
+        $entity3 = new \stdClass();
+        $entity4 = new \stdClass();
+
+        $state = $this->createMock(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
+        $state->method('getInput')->willReturnOnConsecutiveCalls($entity1, $entity2, $entity3, $entity4);
+        $state->expects($this->once())->method('setOutput')->with([$entity3, $entity4]);
+
+        $persisted = [];
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('persist')->willReturnCallback(static function (object $entity) use (&$persisted): void {
+            $persisted[] = $entity;
+        });
+        $entityManager->expects($this->exactly(2))->method('flush')
+            ->willReturnOnConsecutiveCalls($this->throwException(new \RuntimeException('Flush failed')), null);
+        // The entity manager is closed by Doctrine when the flush fails: nothing to detach
+        $entityManager->method('isOpen')->willReturn(false);
+        $entityManager->expects($this->never())->method('detach');
+
+        $managerRegistry = $this->createStub(ManagerRegistry::class);
+        $managerRegistry->method('getManagerForClass')->willReturn($entityManager);
+
+        $task = $this->getTask(['batch_count' => 2], $managerRegistry);
+        $batchProperty = (new \ReflectionClass(DoctrineBatchWriterTask::class))->getProperty('batch');
+
+        $task->execute($state);
+        try {
+            $task->execute($state);
+            $this->fail('The exception of the flush must be rethrown');
+        } catch (\RuntimeException $exception) {
+            $this->assertSame('Flush failed', $exception->getMessage());
+        }
+        $this->assertSame([], $batchProperty->getValue($task));
+
+        $task->execute($state);
+        $task->execute($state);
+        $this->assertSame([$entity1, $entity2, $entity3, $entity4], $persisted);
+        $this->assertSame([], $batchProperty->getValue($task));
+    }
+
+    public function testFailedBatchIsDetachedFromTheEntityManagersStillOpen(): void
+    {
+        $entity1 = new \stdClass();
+        $entity2 = new \stdClass();
+        $state = $this->createMock(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
+        $state->expects($this->never())->method('setOutput');
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->expects($this->exactly(2))->method('persist');
+        $entityManager->method('flush')->willThrowException(new \LogicException('Flush failed'));
+        $entityManager->method('isOpen')->willReturn(true);
+        $entityManager->method('contains')->willReturn(true);
+        $detached = [];
+        $entityManager->expects($this->exactly(2))->method('detach')
+            ->willReturnCallback(static function (object $entity) use (&$detached): void {
+                $detached[] = $entity;
+            });
+
+        $managerRegistry = $this->createStub(ManagerRegistry::class);
+        $managerRegistry->method('getManagerForClass')->willReturn($entityManager);
+
+        $task = new DoctrineBatchWriterTask($managerRegistry);
+        $reflection = new \ReflectionClass(DoctrineBatchWriterTask::class);
+        $batchProperty = $reflection->getProperty('batch');
+        $batchProperty->setValue($task, [$entity1, $entity2]);
+
+        try {
+            $reflection->getMethod('writeBatch')->invoke($task, $state);
+            $this->fail('The exception of the flush must be rethrown');
+        } catch (\LogicException $exception) {
+            $this->assertSame('Flush failed', $exception->getMessage());
+        }
+        $this->assertSame([$entity1, $entity2], $detached);
+        $this->assertSame([], $batchProperty->getValue($task));
+    }
+
+    public function testBatchWithoutEntityManagerIsNotKept(): void
+    {
+        $entity = new \stdClass();
+        $state = $this->createStub(ProcessState::class);
+        $state->method('getContextualizedOptions')->willReturn([]);
+
+        $managerRegistry = $this->createStub(ManagerRegistry::class);
+        $managerRegistry->method('getManagerForClass')->willReturn(null);
+
+        $task = new DoctrineBatchWriterTask($managerRegistry);
+        $reflection = new \ReflectionClass(DoctrineBatchWriterTask::class);
+        $batchProperty = $reflection->getProperty('batch');
+        $batchProperty->setValue($task, [$entity]);
+
+        try {
+            $reflection->getMethod('writeBatch')->invoke($task, $state);
+            $this->fail('An UnexpectedValueException must be thrown');
+        } catch (\UnexpectedValueException) {
+        }
+        $this->assertSame([], $batchProperty->getValue($task));
+    }
+
     public function testWriteBatchThrowsExceptionWhenNoManagerFound(): void
     {
         $this->expectException(\UnexpectedValueException::class);

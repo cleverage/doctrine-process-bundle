@@ -73,5 +73,9 @@ Notes
 * The batch can contain entities of different classes: each entity is persisted in the entity manager managing its
   class, then every involved entity manager is flushed.
 * `flush()` writes **all** the pending changes of the entity manager, not only the buffered entities.
+* When writing a batch fails, the exception is thrown (see the `error_strategy` of the task) and the **whole batch is
+  lost**: its entities are removed from the buffer, so that they are not written again with the next batch, and
+  detached from their entity manager if it is still open. Doctrine closes the entity manager when the flush fails: the
+  next batches then fail too, unless the application resets the entity manager (`ManagerRegistry::resetManager()`).
 * To use the output as a flat list of entities, iterate over it with the
   [InputIteratorTask](https://github.com/cleverage/process-bundle/blob/main/docs/reference/tasks/input_iterator_task.md).
