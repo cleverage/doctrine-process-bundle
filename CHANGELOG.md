@@ -1,6 +1,9 @@
 Latest
 ------
 
+### Changes
+* [#91](https://github.com/cleverage/doctrine-process-bundle/issues/91) `DoctrineBatchWriterTask` (`doctrine_batch_writer`) reference page: warn that without clearing the entity manager after each batch, the import time becomes quadratic and the memory grows. Update documentation.
+
 ### Fixes
 * [#89](https://github.com/cleverage/doctrine-process-bundle/issues/89) `AbstractDoctrineQueryTask` (`doctrine_reader`): the `criteria` keys accept `_` and `.` (field paths) like the `order_by` keys, they were refused as soon as they were not alphanumeric (`created_at` threw "Forbidden field name"). Anything else than a field name or path is still refused. Update documentation, add tests.
 
