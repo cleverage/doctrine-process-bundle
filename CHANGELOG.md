@@ -1,6 +1,9 @@
 Latest
 ------
 
+### Fixes
+* [#89](https://github.com/cleverage/doctrine-process-bundle/issues/89) `AbstractDoctrineQueryTask` (`doctrine_reader`): the `criteria` keys accept `_` and `.` (field paths) like the `order_by` keys, they were refused as soon as they were not alphanumeric (`created_at` threw "Forbidden field name"). Anything else than a field name or path is still refused. Update documentation, add tests.
+
 v3.4.1
 ------
 

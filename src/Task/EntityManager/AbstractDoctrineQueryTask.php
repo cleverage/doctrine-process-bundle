@@ -83,7 +83,9 @@ abstract class AbstractDoctrineQueryTask extends AbstractDoctrineTask
     ): QueryBuilder {
         $qb = $repository->createQueryBuilder('e');
         foreach ($criteria as $field => $value) {
-            if (preg_match('/[^a-zA-Z0-9]/', $field)) {
+            // The field is inserted in the DQL (the value is bound as a parameter): only a field name or path is accepted,
+            // as for the order by (the same rule keeps snake_case columns such as created_at usable)
+            if (!preg_match('/^[a-zA-Z_]\w*(?:\.[a-zA-Z_]\w*)*$/', (string) $field)) {
                 throw new UnexpectedValueException("Forbidden field name '{$field}'");
             }
             $parameterName = 'param_'.bin2hex(random_bytes(4));
