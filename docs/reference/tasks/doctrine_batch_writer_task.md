@@ -72,6 +72,11 @@ Notes
 
 * The batch can contain entities of different classes: each entity is persisted in the entity manager managing its
   class, then every involved entity manager is flushed.
+* **Clear the entity manager after each batch** (as in the first example above, with the
+  [`doctrine_clear_entity_manager`](clear_entity_manager_task.md) task). The task does not detach the entities it has
+  written, so they stay in the identity map of the entity manager, and every `flush()` computes the changes of **all**
+  of them again: the import time grows quadratically with the number of entities (measured with 20,000 rows: 27.6 s
+  without clearing, 8.2 s with it; 100,000 rows become unmanageable) and the memory keeps growing.
 * `flush()` writes **all** the pending changes of the entity manager, not only the buffered entities.
 * When writing a batch fails, the exception is thrown (see the `error_strategy` of the task) and the **whole batch is
   lost**: its entities are removed from the buffer, so that they are not written again with the next batch, and
