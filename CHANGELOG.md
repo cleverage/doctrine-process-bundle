@@ -1,6 +1,9 @@
 Latest
 ------
 
+v3.5
+------
+
 ### Changes
 * [#91](https://github.com/cleverage/doctrine-process-bundle/issues/91) `DoctrineBatchWriterTask` (`doctrine_batch_writer`) reference page: warn that without clearing the entity manager after each batch, the import time becomes quadratic and the memory grows. Update documentation.
 
