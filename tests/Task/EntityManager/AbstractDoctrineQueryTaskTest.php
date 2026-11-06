@@ -39,6 +39,40 @@ class AbstractDoctrineQueryTaskTest extends TestCase
         $method->invoke($task, $repository, ['e.field; DROP TABLE dummy;' => 'value'], []);
     }
 
+    public function testGetQueryBuilderWithSnakeCaseAndPathCriteria(): void
+    {
+        $qb = $this->getQueryBuilder(['created_at' => '2026-01-01', 'address.city' => null, '_x1' => [1, 2]], []);
+
+        self::assertMatchesRegularExpression(
+            '/^SELECT e FROM App\\\\Entity\\\\Book e WHERE e\\.created_at = :param_[0-9a-f]{8} AND e\\.address\\.city IS null AND e\\._x1 IN \\(:param_[0-9a-f]{8}\\)$/',
+            $qb->getDQL()
+        );
+    }
+
+    /**
+     * @param array<string, string|array<string|int>|null> $criteria
+     */
+    #[DataProvider('provideInvalidCriteria')]
+    public function testGetQueryBuilderWithInvalidCriteria(array $criteria): void
+    {
+        $this->expectException(UnexpectedValueException::class);
+
+        $this->getQueryBuilder($criteria, []);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, string>}>
+     */
+    public static function provideInvalidCriteria(): iterable
+    {
+        yield 'expression' => [['id = 1 OR e.id' => 'x']];
+        yield 'space' => [['title ' => 'x']];
+        yield 'leading digit' => [['1title' => 'x']];
+        yield 'trailing dot' => [['address.' => 'x']];
+        yield 'empty' => [['' => 'x']];
+        yield 'sub-query' => [['id IN (SELECT 1)' => 'x']];
+    }
+
     /**
      * The order by field and direction are inserted in the DQL and can come from the context or the input: anything
      * else than a field path and asc / desc would allow DQL injection (e.g. a sub-query reading other entities).
